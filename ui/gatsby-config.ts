@@ -20,8 +20,8 @@ const config: GatsbyConfig = {
         {
             resolve: 'gatsby-plugin-manifest',
             options: {
-                name: 'ManagerLB',
-                short_name: 'ManagerLB',
+                name: 'OctopusLB',
+                short_name: 'OctopusLB',
                 background_color: '#ffffff',
                 theme_color: '#000000',
                 start_url: '/',

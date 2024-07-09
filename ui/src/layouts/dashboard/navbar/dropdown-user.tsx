@@ -3,7 +3,6 @@ import {ClickOutside} from "@components";
 import {useI18next, Link as Url} from 'gatsby-plugin-react-i18next'
 import {Link} from "gatsby";
 import {StaticImage} from "gatsby-plugin-image";
-import dashboard from "@layouts/dashboard/dashboard";
 
 const DropdownUser: FC = () => {
     const {language, originalPath} = useI18next();
