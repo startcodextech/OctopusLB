@@ -2,8 +2,10 @@ import React, {FC} from 'react';
 import {graphql, HeadFC, PageProps} from "gatsby";
 import {Trans, useI18next} from "gatsby-plugin-react-i18next";
 import {LoginForm} from "@modules/auth";
-import {version} from '../../package.json';
 import {getLocales} from "@modules/core/i18n";
+import {version} from '../../package.json';
+import {StaticImage} from "gatsby-plugin-image";
+
 
 const LoginPage: FC<PageProps> = () => {
     const {t} = useI18next();
@@ -15,9 +17,12 @@ const LoginPage: FC<PageProps> = () => {
                     <div className="flex items-center justify-center w-full">
                         <div className="flex items-center max-w-lg w-full">
                             <div className="flex flex-col w-full h-full bg-white rounded-3xl">
-                                <h2 className="mb-3 text-4xl font-extrabold text-grey-dark-900 text-center">
-                                    <Trans i18nKey="app_name"/>
-                                </h2>
+                                <div className="flex items-center flex-col justify-center">
+                                    <StaticImage src="../images/icon.png" alt={""} className="w-28 mb-4"/>
+                                    <h2 className="mb-3 text-4xl font-extrabold text-grey-dark-900 text-center">
+                                        <Trans i18nKey="app_name"/>
+                                    </h2>
+                                </div>
                                 <p className="text-center text-grey-dark-700 mb-4">
                                     <Trans i18nKey="title"/>
                                 </p>

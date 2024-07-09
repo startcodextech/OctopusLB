@@ -2,8 +2,8 @@ import './src/styles/global.css';
 
 export const onInitialClientRender = () => {
     if (!isLoggedIn()) {
-        if (window.location.pathname !== "/login/") {
-            window.location.href = "/login/"
+        if (!/^(\/login\/)$/.test(window.location.pathname)) {
+            //window.location.href = "/login/";
         }
     }
 }

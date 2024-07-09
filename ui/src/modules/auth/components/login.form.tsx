@@ -21,7 +21,7 @@ const LoginForm = () => {
                 </div>
                 <div className="my-12 flex justify-center">
                     <button
-                        className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-purple-blue-500">
+                        className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-primary-600 focus:ring-4 focus:ring-primary-100 bg-primary-500">
                         <Trans i18nKey="title"/>
                     </button>
                 </div>

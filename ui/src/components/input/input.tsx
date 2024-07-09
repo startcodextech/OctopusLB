@@ -2,10 +2,11 @@ import React, {FC, InputHTMLAttributes, useState, FocusEvent, useRef, MouseEvent
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
     fullWidth?: boolean;
+    className?: string;
 };
 
 const Input: FC<Props> = (props) => {
-    const {fullWidth, type, ...rest} = props;
+    const {className, fullWidth, type, ...rest} = props;
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -52,16 +53,16 @@ const Input: FC<Props> = (props) => {
         <>
             {type === "password" ? (<>
                 <div
-                    className={`inline-block relative${fullWidth ? ' w-full' : ''} ${focused ? 'bg-grey-400' : 'bg-grey-200'} rounded-2xl`}
+                    className={`cursor-text inline-block relative${fullWidth ? ' w-full' : ''} ${focused ? 'bg-grey-400' : 'bg-grey-200'} rounded-2xl`}
                     onClick={handleClick}
                     onBlur={handleBlur}
                     onFocus={handleFocus}>
                     <div className="flex items-center justify-between">
                         <input ref={inputRef} {...rest}
                                type={showPassword ? 'text' : 'password'}
-                               className="border-none focus:ring-0 bg-transparent px-5 py-4 text-base font-medium outline-none placeholder:text-grey-700 text-dark-grey-900"/>
+                               className="border-none focus:ring-0 bg-transparent px-5 py-3 text-base font-medium outline-none placeholder:text-grey-700 text-dark-grey-900"/>
                         <span onClick={handleShowPassword}
-                              className="px-4 py-4 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
+                              className="px-5 py-3 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
                             {showPassword ? (<>
                                 <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -120,7 +121,7 @@ const Input: FC<Props> = (props) => {
                         <input
                             {...rest}
                             onBlur={handleBlur}
-                            className={`bg-grey-200 border-none focus:ring-0 px-5 py-4 text-base font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 text-dark-grey-900 rounded-2xl${fullWidth ? ' w-full' : ''}`}/>
+                            className={`bg-grey-200 border-none focus:ring-0 px-5 py-3 text-base font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 text-dark-grey-900 rounded-2xl${fullWidth ? ' w-full' : ''} ${className}`}/>
                     </>
                 )}
                 </>

@@ -7,7 +7,7 @@
     font-weight: 300 900;
     font-style: normal;
     font-display: swap;
-    src: url("../fonts/RedHatDisplay-VariableFont_wght.ttf") format("truetype");
+    src: url("../static/fonts/RedHatDisplay-VariableFont_wght.ttf") format("truetype");
 }
 
 * {

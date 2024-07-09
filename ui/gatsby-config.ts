@@ -14,6 +14,21 @@ const config: GatsbyConfig = {
     graphqlTypegen: true,
     plugins: [
         "gatsby-plugin-postcss",
+        "gatsby-plugin-image",
+        "gatsby-plugin-sharp",
+        "gatsby-transformer-sharp",
+        {
+            resolve: 'gatsby-plugin-manifest',
+            options: {
+                name: 'ManagerLB',
+                short_name: 'ManagerLB',
+                background_color: '#ffffff',
+                theme_color: '#000000',
+                start_url: '/',
+                icon: 'src/images/icon.png',
+                display: 'standalone',
+            }
+        },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
