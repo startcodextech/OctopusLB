@@ -25,7 +25,7 @@ const config: GatsbyConfig = {
                 background_color: '#ffffff',
                 theme_color: '#000000',
                 start_url: '/',
-                icon: 'src/images/icon.png',
+                icon: 'src/images/logo.png',
                 display: 'standalone',
             }
         },

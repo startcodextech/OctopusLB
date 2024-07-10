@@ -16,7 +16,7 @@ const DropdownUser: FC = () => {
             <ClickOutside onClick={() => handleDropdown(false)} className="relative">
                 <Link to="#" className="flex items-center gap-4" onClick={() => handleDropdown(!dropdownOpen)}>
                     <span className="hidden text-right lg:block">
-                        <span className="block text-sm font-medium text-black dark:text-white">
+                        <span className="block text-sm font-medium text-black">
                             Thomas Anree
                         </span>
                         <span className="block text-xs">UX Designer</span>
@@ -36,9 +36,9 @@ const DropdownUser: FC = () => {
                 {dropdownOpen && (
                     <>
                         <div
-                            className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-md border border-gray-200 bg-white shadow-lg`}>
+                            className={`absolute right-0 mt-4 flex w-[250px] flex-col rounded-md border border-gray-200 bg-white shadow-lg`}>
                             <ul className="flex flex-col gap-5 border-b border-stroke">
-                                <li className="px-6 py-3 text-gray-500 fill-gray-500 hover:text-black hover:fill-black duration-300 ease-in-out hover:bg-gray-100">
+                                <li className="px-6 py-3 text-gray-500 fill-gray-500 hover:text-primary hover:fill-primary duration-300 ease-in-out hover:bg-gray-100">
                                     <Url
                                         language={language}
                                         to="/"
@@ -54,7 +54,7 @@ const DropdownUser: FC = () => {
                                 </li>
                             </ul>
                             <button
-                                className="flex items-center gap-3.5 px-6 py-3 text-sm font-medium duration-300 ease-in-out text-gray-500 fill-gray-500 hover:text-black hover:fill-black lg:text-base hover:bg-gray-100">
+                                className="flex items-center gap-3.5 px-6 py-3 text-sm font-medium duration-300 ease-in-out text-gray-500 fill-gray-500 hover:text-primary hover:fill-primary lg:text-base hover:bg-gray-100">
                                 <svg viewBox="0 0 471.2 471.2" width={24} height={24}>
                                     <path d="M227.619,444.2h-122.9c-33.4,0-60.5-27.2-60.5-60.5V87.5c0-33.4,27.2-60.5,60.5-60.5h124.9c7.5,0,13.5-6,13.5-13.5s-6-13.5-13.5-13.5h-124.9c-48.3,0-87.5,39.3-87.5,87.5v296.2c0,48.3,39.3,87.5,87.5,87.5h122.9c7.5,0,13.5-6,13.5-13.5S235.019,444.2,227.619,444.2z"></path>
                                     <path d="M450.019,226.1l-85.8-85.8c-5.3-5.3-13.8-5.3-19.1,0c-5.3,5.3-5.3,13.8,0,19.1l62.8,62.8h-273.9c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5h273.9l-62.8,62.8c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4l85.8-85.8C455.319,239.9,455.319,231.3,450.019,226.1z"></path>

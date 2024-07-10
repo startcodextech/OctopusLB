@@ -53,16 +53,16 @@ const Input: FC<Props> = (props) => {
         <>
             {type === "password" ? (<>
                 <div
-                    className={`cursor-text inline-block relative${fullWidth ? ' w-full' : ''} ${focused ? 'bg-gray-200' : 'bg-gray-100'} rounded-2xl`}
+                    className={`cursor-text inline-block relative${fullWidth ? ' w-full' : ''} ${focused ? 'bg-gray-200' : 'bg-gray-100'} rounded-xl`}
                     onClick={handleClick}
                     onBlur={handleBlur}
                     onFocus={handleFocus}>
                     <div className="flex items-center justify-between">
                         <input ref={inputRef} {...rest}
                                type={showPassword ? 'text' : 'password'}
-                               className="border-none focus:ring-0 bg-transparent px-5 py-3 text-base font-medium outline-none placeholder:text-grey-700 text-dark-grey-900"/>
+                               className="border-none focus:ring-0 bg-transparent px-5 py-2.5 text-base font-medium outline-none placeholder:text-gray-500 text-black"/>
                         <span onClick={handleShowPassword}
-                              className="px-5 py-3 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
+                              className="px-5 py-2.5 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
                             {showPassword ? (<>
                                 <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -121,7 +121,7 @@ const Input: FC<Props> = (props) => {
                         <input
                             {...rest}
                             onBlur={handleBlur}
-                            className={`bg-gray-100 border-none focus:ring-0 px-5 py-3 text-base font-medium outline-none focus:bg-gray-200 placeholder:text-grey-700 text-dark-grey-900 rounded-2xl${fullWidth ? ' w-full' : ''} ${className}`}/>
+                            className={`bg-gray-100 border-none focus:ring-0 px-5 py-2.5 text-base font-medium outline-none focus:bg-gray-200 placeholder:text-gray-500 text-black rounded-xl${fullWidth ? ' w-full' : ''} ${className}`}/>
                     </>
                 )}
                 </>

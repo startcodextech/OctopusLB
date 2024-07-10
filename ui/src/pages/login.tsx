@@ -14,7 +14,7 @@ const LoginPage: FC<PageProps> = () => {
     return (
         <>
             <div className="container max-w-lg w-full mx-auto mt-8">
-                <div className="px-8 pt-8 bg-[rgba(255,255,255,.7)] backdrop-blur-lg rounded-3xl">
+                <div className="p-8 bg-[rgba(255,255,255,.7)] backdrop-blur-lg rounded-3xl">
                     <div className="flex items-center flex-col justify-center">
                         <StaticImage placeholder="none" loading="lazy" src="../images/icon.png" alt={""} className="w-28 mb-4"/>
                         <h2 className="mb-3 text-4xl font-extrabold text-center">

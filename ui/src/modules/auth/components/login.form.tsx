@@ -19,9 +19,9 @@ const LoginForm = () => {
                     <Input type="password" id="password" placeholder={t('password_placeholder')}
                            fullWidth={true}/>
                 </div>
-                <div className="my-12 flex justify-center">
+                <div className="mt-12 mb-6 flex justify-center">
                     <button
-                        className="w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-primary-600 focus:ring-4 focus:ring-primary-100 bg-primary">
+                        className="w-full px-6 py-5 text-sm font-bold leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-primary-600 focus:ring-4 focus:ring-primary-100 bg-primary">
                         <Trans i18nKey="title"/>
                     </button>
                 </div>
