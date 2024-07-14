@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/phuslu/log"
-	"github.com/startcodextech/managerlb/internal/config"
-	"github.com/startcodextech/managerlb/pkg/system"
+	"github.com/startcodextech/octopuslb/internal/config"
+	"github.com/startcodextech/octopuslb/pkg/system"
 )
 
 type Api struct {

@@ -21,8 +21,21 @@ else
     CHOWN_GROUP := root
 endif
 
-.PHONY: build-linux-amd64
-build-linux-amd64:
+.PHONY: app
+app:
+	@echo "Building ui react"
+	@sed -i.bak 's/"version": "[^"]*"/"version": "$(VERSION)"/' ui/package.json
+	@rm -rf $(CURDIR)/internal/http/public/*
+	if [ ! -d "ui/node_modules" ] || [ -z "$$(ls -A ui/node_modules)" ]; then \
+  		cd ui && npm i --legacy-peer-deps && npm run clean && npm run build; \
+	else \
+		cd ui && npm run clean && npm run build; \
+	fi
+	@cp -r $(CURDIR)/ui/public/* $(CURDIR)/internal/http/public/
+	@echo "Done!"
+
+.PHONY: build-linux-amd64 app
+build-linux-amd64: app
 	@echo "Building version $(VERSION) linux/amd64 binary..."
 	$(BUILD_LINUX_AMD64) go build -o $(BINARY_PATH_AMD64) $(MAIN_FILE)
 	@chown root:$(CHOWN_GROUP) $(BINARY_PATH_AMD64)
@@ -30,19 +43,24 @@ build-linux-amd64:
 	@echo "Done!"
 
 .PHONY: build-linux-arm64
-build-linux-arm64:
+build-linux-arm64: app
 	@echo "Building version $(VERSION) linux/arm64 binary..."
 	$(BUILD_LINUX_ARM64) go build -o $(BINARY_PATH_ARM64) $(MAIN_FILE)
 	@chown root:$(CHOWN_GROUP) $(BINARY_PATH_ARM64)
 	@chmod u+s $(BINARY_PATH_ARM64)
 	@echo "Done!"
 
+.PHONY: clean
 clean:
 	@echo "Cleaning..."
 	rm -rf $(PATH_BIN)
 	@echo "Done!"
 
+.PHONY: version
 version:
 	@echo "Versión: $(VERSION)"
 
+.PHONY: build
 build: build-linux-amd64 build-linux-arm64
+
+

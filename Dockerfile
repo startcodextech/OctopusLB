@@ -13,6 +13,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh
 
 EXPOSE 80
 EXPOSE 443
+EXPOSE 3000
 
 CMD ["air"]
 

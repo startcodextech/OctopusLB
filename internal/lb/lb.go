@@ -1,9 +1,9 @@
 package lb
 
 import (
-	"github.com/startcodextech/managerlb/internal/config"
-	"github.com/startcodextech/managerlb/pkg/nginx"
-	"github.com/startcodextech/managerlb/pkg/system"
+	"github.com/startcodextech/octopuslb/internal/config"
+	"github.com/startcodextech/octopuslb/pkg/nginx"
+	"github.com/startcodextech/octopuslb/pkg/system"
 	"sync"
 )
 

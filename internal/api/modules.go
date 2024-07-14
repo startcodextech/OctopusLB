@@ -3,7 +3,7 @@ package api
 import (
 	"errors"
 	"github.com/phuslu/log"
-	"github.com/startcodextech/managerlb/internal/lb"
+	"github.com/startcodextech/octopuslb/internal/lb"
 )
 
 var (

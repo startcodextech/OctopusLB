@@ -1,9 +1,9 @@
 {
-  "name": "manager-lb",
-  "version": "1.0.0",
+  "name": "octopus-lb",
+  "version": "0.0.1",
   "private": true,
-  "description": "manager-lb",
-  "author": "Julio Cesar Caicedo",
+  "description": "Octopus LB",
+  "author": "Start Codex",
   "keywords": [
     "gatsby"
   ],

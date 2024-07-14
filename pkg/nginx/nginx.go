@@ -3,8 +3,8 @@ package nginx
 import (
 	"embed"
 	"errors"
-	"github.com/startcodextech/managerlb/pkg/exec"
-	"github.com/startcodextech/managerlb/pkg/system"
+	"github.com/startcodextech/octopuslb/pkg/exec"
+	"github.com/startcodextech/octopuslb/pkg/system"
 	"os"
 	"regexp"
 	"strings"

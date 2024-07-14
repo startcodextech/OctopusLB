@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/startcodextech/managerlb/internal/api"
-	"github.com/startcodextech/managerlb/internal/logs"
+	"github.com/startcodextech/octopuslb/internal/api"
+	"github.com/startcodextech/octopuslb/internal/http"
+	"github.com/startcodextech/octopuslb/internal/logs"
 )
 
 func init() {
@@ -10,9 +11,13 @@ func init() {
 }
 
 func main() {
-	_, err := api.Init()
+	app, err := api.Init()
 	if err != nil {
 		panic(err)
 	}
+
+	server := http.NewServer(app)
+
+	server.Start()
 
 }

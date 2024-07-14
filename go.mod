@@ -1,4 +1,4 @@
-module github.com/startcodextech/managerlb
+module github.com/startcodextech/octopuslb
 
 go 1.22.1
 
