@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/phuslu/log"
+	"errors"
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/host"
@@ -15,10 +15,55 @@ import (
 var (
 	netPrevBytesSent = uint64(0)
 	netPrevBytesRecv = uint64(0)
+
+	ErrUnsupportedSystemFamily = errors.New("Unsupported system family")
+)
+
+const (
+	Debian OSFamily = "debian"
+	Ubuntu OSFamily = "ubuntu"
+	Rhel   OSFamily = "rhel"
 )
 
 type (
-	System struct {
+	OSFamily string
+
+	InformationUnit struct {
+		Value float64 `json:"value"`
+		Unit  string  `json:"unit"`
+	}
+
+	ResourceConsumptionRam struct {
+		Total       InformationUnit `json:"total"`
+		Used        InformationUnit `json:"used"`
+		Free        InformationUnit `json:"free"`
+		Share       InformationUnit `json:"share"`
+		Buffers     InformationUnit `json:"buffers"`
+		Cached      InformationUnit `json:"cached"`
+		Available   InformationUnit `json:"available"`
+		UsedPercent float64         `json:"used_percent"`
+	}
+
+	ResourceConsumptionDisk struct {
+		Total       InformationUnit `json:"total"`
+		Used        InformationUnit `json:"used"`
+		Free        InformationUnit `json:"free"`
+		UsedPercent float64         `json:"used_percent"`
+	}
+
+	ResourceConsumptionNet struct {
+		Sent     InformationUnit `json:"sent"`
+		Received InformationUnit `json:"received"`
+	}
+
+	ResourceConsumption struct {
+		RAM  ResourceConsumptionRam  `json:"ram"`
+		CPU  float64                 `json:"cpu"`
+		Disk ResourceConsumptionDisk `json:"disk"`
+		Net  ResourceConsumptionNet  `json:"net"`
+	}
+
+	SysInfo struct {
 		host *host.InfoStat
 		cpu  []cpu.InfoStat
 		mem  *mem.VirtualMemoryStat
@@ -27,7 +72,10 @@ type (
 		net  []net.InterfaceStat
 		load *load.AvgStat
 
-		OS                 OS              `json:"os"`
+		Os                 string          `json:"os"`
+		Platform           string          `json:"platform"`
+		PlatformFamily     OSFamily        `json:"platform_family"`
+		PlatformVersion    string          `json:"platform_version"`
 		Architecture       string          `json:"architecture"`
 		Virtualization     string          `json:"virtualization"`
 		VirtualizationRole string          `json:"virtualization_role"`
@@ -38,7 +86,7 @@ type (
 	}
 )
 
-func Init() *System {
+func Get() (*SysInfo, error) {
 	hostInfo, _ := host.Info()
 	cpuInfo, _ := cpu.Info()
 	menInfo, _ := mem.VirtualMemory()
@@ -47,19 +95,19 @@ func Init() *System {
 	netInfo, _ := net.Interfaces()
 	loadInfo, _ := load.Avg()
 
-	//log.Info().Str("distro linux", hostInfo.PlatformFamily).Msg("Distro Linux")
+	osFamily := OSFamily(hostInfo.PlatformFamily)
 
-	pack, err := detectPackageManager()
-	if err != nil {
-		panic(err)
+	validOsFamily := map[OSFamily]bool{
+		Debian: true,
+		Ubuntu: true,
+		Rhel:   true,
 	}
 
-	packs, err := GetPackages(hostInfo.PlatformFamily)
-	if err != nil {
-		panic(err)
+	if !validOsFamily[OSFamily(osFamily)] {
+		return nil, ErrUnsupportedSystemFamily
 	}
 
-	return &System{
+	info := &SysInfo{
 		host: hostInfo,
 		cpu:  cpuInfo,
 		mem:  menInfo,
@@ -68,14 +116,10 @@ func Init() *System {
 		net:  netInfo,
 		load: loadInfo,
 
-		OS: OS{
-			Name:            hostInfo.OS,
-			Platform:        hostInfo.Platform,
-			PlatformFamily:  hostInfo.PlatformFamily,
-			PlatformVersion: hostInfo.PlatformVersion,
-			PackManager:     pack,
-			Packages:        packs,
-		},
+		Os:                 hostInfo.OS,
+		Platform:           hostInfo.Platform,
+		PlatformFamily:     osFamily,
+		PlatformVersion:    hostInfo.PlatformVersion,
 		Architecture:       hostInfo.KernelArch,
 		Virtualization:     hostInfo.VirtualizationSystem,
 		VirtualizationRole: hostInfo.VirtualizationRole,
@@ -84,14 +128,13 @@ func Init() *System {
 		RAM:                BytesToUnit(menInfo.Total),
 		DiskSize:           BytesToUnit(diskInfo.Total),
 	}
+
+	return info, nil
 }
 
-func (s *System) CurrentResourcesConsumption() ResourceConsumption {
+func (s *SysInfo) CurrentResourcesConsumption() ResourceConsumption {
 	cpuPercent, _ := cpu.Percent(0, false)
 	netCounter, _ := net.IOCounters(false)
-
-	log.Printf("\n")
-	log.Printf("cpuPercent: %v\n", netCounter)
 
 	netSent := netPrevBytesSent
 	netRecv := netPrevBytesRecv

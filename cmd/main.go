@@ -1,37 +1,18 @@
 package main
 
 import (
-	"github.com/phuslu/log"
-	"github.com/startcodextech/managerlb/system"
+	"github.com/startcodextech/managerlb/internal/api"
+	"github.com/startcodextech/managerlb/internal/logs"
 )
 
 func init() {
-	log.DefaultLogger = log.Logger{
-		Level:      log.DebugLevel,
-		TimeFormat: "15:04:05",
-		Caller:     1,
-		Writer: &log.ConsoleWriter{
-			ColorOutput:    true,
-			QuoteString:    true,
-			EndWithMessage: true,
-		},
-	}
+	logs.Init()
 }
 
 func main() {
-	log.Info().Msg("Starting OpenLB")
-
-	sys := system.Init()
-
-	err := sys.OS.InstallPackage("nginx")
+	_, err := api.Init()
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to install package")
+		panic(err)
 	}
 
-	err = sys.OS.UninstallPackage("nginx")
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to uninstall package")
-	}
-
-	select {}
 }
