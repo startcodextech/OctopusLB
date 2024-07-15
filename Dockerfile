@@ -9,11 +9,16 @@ COPY . .
 
 FROM base AS dev
 
+RUN apt update && \
+    apt install -y systemd
+
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
 EXPOSE 80
 EXPOSE 443
 EXPOSE 3000
+EXPOSE 2345
 
 CMD ["air"]
 
