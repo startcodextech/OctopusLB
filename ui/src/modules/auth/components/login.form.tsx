@@ -1,6 +1,6 @@
 import React from 'react';
 import {Input, Label} from "@components";
-import {Trans, useI18next} from "gatsby-plugin-react-i18next";
+import {Trans, useI18next} from "@herob191/gatsby-plugin-react-i18next";
 
 const LoginForm = () => {
     const {t} = useI18next();

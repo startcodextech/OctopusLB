@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {graphql, HeadFC, PageProps} from "gatsby";
-import {Trans, useI18next} from "gatsby-plugin-react-i18next";
+import {Trans, useI18next} from "@herob191/gatsby-plugin-react-i18next";
 import {LoginForm} from "@modules/auth";
 import {getLocales} from "@modules/core/i18n";
 import {StaticImage} from "gatsby-plugin-image";

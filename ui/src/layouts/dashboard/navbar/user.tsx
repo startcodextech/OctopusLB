@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import {ClickOutside} from "@components";
-import {useI18next, Link as Url} from 'gatsby-plugin-react-i18next'
+import {useI18next, Link as Url} from '@herob191/gatsby-plugin-react-i18next';
 import {Link} from "gatsby";
 import {StaticImage} from "gatsby-plugin-image";
 

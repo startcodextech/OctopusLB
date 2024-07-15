@@ -41,3 +41,14 @@ func configureApp(app *fiber.App) {
 func (s *Server) Start() {
 	log.Fatal(s.app.Listen(":3000"))
 }
+
+func (s *Server) installModule(c *fiber.Ctx) error {
+	err := s.api.InstallModule("test")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{"message": "Module installed successfully"})
+}

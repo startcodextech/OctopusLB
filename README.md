@@ -1,5 +1,13 @@
+# Octopus LB
+```shell
+brew install buf
+brew install protobuf
+brew install protoc-gen-js
+brew install protoc-gen-grpc-web
+go get github.com/grpc-ecosystem/grpc-gateway/v2@v2.20.0
+```
 
-# Cross-compile
+## Cross-compile
 
 For cross-compiling, you need to install the following packages.
 

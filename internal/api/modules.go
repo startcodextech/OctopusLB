@@ -80,15 +80,18 @@ func (api *Api) InstallModule(name string) error {
 	if err != nil {
 		return err
 	}
-	err = module.Install()
 
-	if err != nil {
-		log.Error().
-			Err(err).
-			Str("OctopusLB", "InstallModule").
-			Str("Name", name).
-			Msg("Failed")
-		return err
+	if !module.IsInstalled() {
+		err = module.Install()
+
+		if err != nil {
+			log.Error().
+				Err(err).
+				Str("OctopusLB", "InstallModule").
+				Str("Name", name).
+				Msg("Failed")
+			return err
+		}
 	}
 
 	log.Info().
@@ -103,15 +106,18 @@ func (api *Api) UninstallModule(name string) error {
 	if err != nil {
 		return err
 	}
-	err = module.Uninstall()
 
-	if err != nil {
-		log.Error().
-			Err(err).
-			Str("OctopusLB", "UninstallModule").
-			Str("Name", name).
-			Msg("Failed")
-		return err
+	if module.IsInstalled() {
+		err = module.Uninstall()
+
+		if err != nil {
+			log.Error().
+				Err(err).
+				Str("OctopusLB", "UninstallModule").
+				Str("Name", name).
+				Msg("Failed")
+			return err
+		}
 	}
 
 	log.Info().
