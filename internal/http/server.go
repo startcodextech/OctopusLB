@@ -36,6 +36,7 @@ func configureApp(app *fiber.App) {
 		Browse:     true,
 		PathPrefix: "public",
 	}))
+
 }
 
 func (s *Server) Start() {

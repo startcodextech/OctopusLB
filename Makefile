@@ -25,23 +25,26 @@ endif
 buf:
 	@echo "Checking buf..."
 	@buf generate
-	@mkdir -p $(CURDIR)/ui/proto
-	@cp $(CURDIR)/proto/* $(CURDIR)/ui/proto
-	@cd $(CURDIR)/ui && protoc -I=$(CURDIR)/ui/proto $(CURDIR)/ui/proto/*.proto --js_out=import_style=commonjs,binary:$(CURDIR)/ui/src/proto --grpc-web_out=import_style=typescript,mode=grpcweb:$(CURDIR)/ui/src/proto
-	@rm -rf $(CURDIR)/ui/proto
+	@rm -f $(CURDIR)/web/proto
+	@mkdir -p $(CURDIR)/web/proto
+	@mkdir -p $(CURDIR)/web/src/proto
+	@cp $(CURDIR)/proto/* $(CURDIR)/web/proto
+	@cd $(CURDIR)/web && protoc -I=$(CURDIR)/web/proto $(CURDIR)/web/proto/*.proto --js_out=import_style=commonjs,binary:$(CURDIR)/web/src/proto --grpc-web_out=import_style=typescript,mode=grpcweb:$(CURDIR)/web/src/proto
+	@rm -rf $(CURDIR)/web/proto
 	@echo "Done!"
 
 .PHONY: app
 app: buf
-	@echo "Building ui react"
-	@sed -i.bak 's/"version": "[^"]*"/"version": "$(VERSION)"/' ui/package.json
+	@echo "Building web react"
+	@rm -rf $(CURDIR)/web/.next $(CURDIR)/web/build
+	@sed -i.bak 's/"version": "[^"]*"/"version": "$(VERSION)"/' $(CURDIR)/web/package.json
 	@rm -rf $(CURDIR)/internal/http/public/*
-	if [ ! -d "ui/node_modules" ] || [ -z "$$(ls -A ui/node_modules)" ]; then \
-  		cd ui && npm install && npm run clean && npm run build; \
+	if [ ! -d "web/node_modules" ] || [ -z "$$(ls -A web/node_modules)" ]; then \
+  		cd web && npm install && npm run build; \
 	else \
-		cd ui && npm run clean && npm run build; \
+		cd web && npm run build; \
 	fi
-	@cp -r $(CURDIR)/ui/public/* $(CURDIR)/internal/http/public/
+	@cp -r $(CURDIR)/web/build/* $(CURDIR)/internal/http/public/
 	@echo "Done!"
 
 .PHONY: build-linux-amd64 app
