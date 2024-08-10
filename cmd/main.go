@@ -1,23 +1,31 @@
 package main
 
 import (
-	"github.com/startcodextech/octopuslb/internal/api"
-	"github.com/startcodextech/octopuslb/internal/http"
-	"github.com/startcodextech/octopuslb/internal/logs"
+	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
 )
 
-func init() {
-	logs.Init()
-}
-
 func main() {
-	app, err := api.Init()
+	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
-	server := http.NewServer(app)
+	exePath, err := os.Executable()
+	if err != nil {
+		fmt.Println("Error obteniendo la ruta del ejecutable:", err)
+		return
+	}
+	log.Println("Ruta del ejecutable:", exePath)
 
-	server.Start()
+	binPathCaddy := filepath.Join(dir, "bin/darwin/arm64/octopus-caddy")
 
+	out, err := exec.Command("sh", "-c", binPathCaddy+" start").CombinedOutput()
+	println(string(out))
+	if err != nil {
+		panic(err)
+	}
 }

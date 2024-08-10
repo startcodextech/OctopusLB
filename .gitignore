@@ -34,3 +34,7 @@ bin
 internal/http/public
 
 octopus.config
+
+caddy
+
+caddy.json
