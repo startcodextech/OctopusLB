@@ -2,30 +2,21 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
-	"path/filepath"
+	"github.com/startcodextech/octopuslb/internal/logs"
+	"github.com/startcodextech/octopuslb/pkg/dhcp"
 )
 
-func main() {
-	dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
+func init() {
+	logs.Init()
+}
 
-	exePath, err := os.Executable()
+func main() {
+	ifaces, err := dhcp.GetNetworkInterfaces()
 	if err != nil {
-		fmt.Println("Error obteniendo la ruta del ejecutable:", err)
+		fmt.Printf("Error: %s\n", err)
 		return
 	}
-	log.Println("Ruta del ejecutable:", exePath)
-
-	binPathCaddy := filepath.Join(dir, "bin/darwin/arm64/octopus-caddy")
-
-	out, err := exec.Command("sh", "-c", binPathCaddy+" start").CombinedOutput()
-	println(string(out))
-	if err != nil {
-		panic(err)
+	for _, iface := range ifaces {
+		fmt.Printf("%+v\n", iface)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/phuslu/log"
 	"net"
 	"sync"
+	"time"
 )
 
 const (
@@ -83,6 +84,8 @@ func (s *DHCPServer) Start() error {
 				Msg("Failed to start DHCP server")
 		}
 	}()
+
+	s.handler.StartLeaseCleanup(1 * time.Minute)
 
 	return s.handleSignal()
 }
