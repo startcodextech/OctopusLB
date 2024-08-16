@@ -16,9 +16,9 @@ var (
 	toolsDnsMacOS   = []string{"scutil", "networksetup"}
 	toolsDnsWindows = []string{"netsh", "powershell"}
 
-	UnsupportedOS           = errors.New("unsupported operating system")
-	UnsupportedToolDNS      = errors.New("unsupported DNS tool")
-	NotFountDNSForInterface = errors.New("no DNS servers found for interface")
+	ErrUnsupportedOS           = errors.New("unsupported operating system")
+	ErrUnsupportedToolDNS      = errors.New("unsupported DNS tool")
+	ErrNotFountDNSForInterface = errors.New("no DNS servers found for interface")
 )
 
 // setDNS configures the DNS servers for the specified network interface
@@ -31,7 +31,7 @@ func setDNS(interfaceName string, dnsServers []string) error {
 	case "windows":
 		return setDNSWindows(interfaceName, dnsServers)
 	default:
-		return UnsupportedOS
+		return ErrUnsupportedOS
 	}
 }
 
@@ -44,29 +44,29 @@ func getDNS(interfaceName string) ([]string, error) {
 	case "windows":
 		return getDNSWindows(interfaceName)
 	}
-	return nil, UnsupportedOS
+	return nil, ErrUnsupportedOS
 }
 
 // getToolDNS returns the DNS tool available on Linux
 func getToolDNS() (string, error) {
 	switch runtime.GOOS {
 	case "linux":
-		return getToolName(toolsDnsLinux)
+		return getToolName(toolsDnsLinux, ErrUnsupportedToolDNS)
 	case "darwin":
-		return getToolName(toolsDnsMacOS)
+		return getToolName(toolsDnsMacOS, ErrUnsupportedToolDNS)
 	case "windows":
-		return getToolName(toolsDnsWindows)
+		return getToolName(toolsDnsWindows, ErrUnsupportedToolDNS)
 	}
-	return "", UnsupportedOS
+	return "", ErrUnsupportedOS
 }
 
-func getToolName(tools []string) (string, error) {
+func getToolName(tools []string, err error) (string, error) {
 	for _, tool := range tools {
 		if _, err := exec.LookPath(tool); err == nil {
 			return tool, nil
 		}
 	}
-	return "", UnsupportedToolDNS
+	return "", err
 }
 
 // setDNSLinux configures the DNS servers for the specified network interface on Linux
@@ -94,12 +94,19 @@ func setDNSLinux(interfaceName string, dnsServers []string) error {
 		if err := cmd.Run(); err != nil {
 			return err
 		}
-		return exec.Command("netconfig", "update", "-f").Run()
+		err := exec.Command("netconfig", "update", "-f").Run()
+		if err != nil {
+			return err
+		}
+		return nil
 	case "dnsmasq":
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo -e 'nameserver %s' > /etc/dnsmasq.conf", dnsString))
-		return cmd.Run()
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
 	}
-	return UnsupportedToolDNS
+	return ErrUnsupportedToolDNS
 }
 
 // setDNSMacOS configures the DNS servers for the specified network interface on macOS
@@ -122,7 +129,7 @@ func setDNSMacOS(interfaceName string, dnsServers []string) error {
 		return cmd.Run()
 	}
 
-	return UnsupportedToolDNS
+	return ErrUnsupportedToolDNS
 }
 
 // setDNSWindows configures the DNS servers for the specified network interface on Windows
@@ -136,7 +143,7 @@ func setDNSWindows(interfaceName string, dnsServers []string) error {
 	case "netsh":
 		for i, dns := range dnsServers {
 			index := fmt.Sprintf("index=%d", i+1)
-			cmd := exec.Command("netsh", "interface", "ip", "add", "dns", interfaceName, dns, index)
+			cmd := exec.Command("netsh", "interface", "ipv4", "set", "dns", `name="`+interfaceName+`"`, "static", dns, index)
 			if err := cmd.Run(); err != nil {
 				return err
 			}
@@ -146,7 +153,7 @@ func setDNSWindows(interfaceName string, dnsServers []string) error {
 		return cmd.Run()
 	}
 
-	return UnsupportedToolDNS
+	return ErrUnsupportedToolDNS
 }
 
 func getDNSWindows(interfaceName string) ([]string, error) {
@@ -163,7 +170,7 @@ func getDNSWindows(interfaceName string) ([]string, error) {
 		psComd := fmt.Sprintf(`Get-DnsClientServerAddress -InterfaceAlias "%s" -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses`, interfaceName)
 		cmd = exec.Command("powershell", "-Command", psComd)
 	default:
-		return nil, UnsupportedToolDNS
+		return nil, ErrUnsupportedToolDNS
 	}
 	out, err := cmd.Output()
 	if err != nil {
@@ -181,7 +188,7 @@ func getDNSWindows(interfaceName string) ([]string, error) {
 	}
 
 	if len(dnsServers) == 0 {
-		return nil, NotFountDNSForInterface
+		return nil, ErrNotFountDNSForInterface
 	}
 
 	return dnsServers, nil
@@ -233,7 +240,7 @@ func getDNSMacos(interfaceName string) ([]string, error) {
 		}
 		return dnsServers, nil
 	}
-	return nil, UnsupportedToolDNS
+	return nil, ErrUnsupportedToolDNS
 }
 
 func getDNSLinux(interfaceName string) ([]string, error) {
@@ -295,7 +302,7 @@ func parseDNSFromOutputLinux(output, prefix string) ([]string, error) {
 	}
 
 	if len(dnsServers) == 0 {
-		return nil, NotFountDNSForInterface
+		return nil, ErrNotFountDNSForInterface
 	}
 	return dnsServers, nil
 }
