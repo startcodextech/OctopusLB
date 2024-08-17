@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	toolsDnsLinux   = []string{"nmcli", "resolvectl", "systemd-resolve", "netconfig", "dnsmasq"}
+	toolsDnsLinux   = []string{"nmcli", "netconfig"}
 	toolsDnsMacOS   = []string{"scutil", "networksetup"}
 	toolsDnsWindows = []string{"netsh", "powershell"}
 
@@ -81,14 +81,11 @@ func setDNSLinux(interfaceName string, dnsServers []string) error {
 	switch tool {
 	case "nmcli":
 		cmd := exec.Command("nmcli", "con", "mod", interfaceName, "ipv4.dns", dnsString)
-		return cmd.Run()
-	case "resolvectl", "systemd-resolve":
-		for _, dns := range dnsServers {
-			cmd := exec.Command(tool, "dns", interfaceName, dns)
-			if err := cmd.Run(); err != nil {
-				return err
-			}
+		err = cmd.Run()
+		if err != nil {
+			return err
 		}
+		return exec.Command("nmcli", "con", "up", interfaceName).Run()
 	case "netconfig":
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo 'NETCONFIG_DNS_STATIC_SERVERS=\"%s\"' >> /etc/sysconfig/network/config", dnsString))
 		if err := cmd.Run(); err != nil {
@@ -99,12 +96,6 @@ func setDNSLinux(interfaceName string, dnsServers []string) error {
 			return err
 		}
 		return nil
-	case "dnsmasq":
-		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo -e 'nameserver %s' > /etc/dnsmasq.conf", dnsString))
-		err := cmd.Run()
-		if err != nil {
-			return err
-		}
 	}
 	return ErrUnsupportedToolDNS
 }
@@ -119,7 +110,7 @@ func setDNSMacOS(interfaceName string, dnsServers []string) error {
 	switch tool {
 	case "scutil":
 		for _, dns := range dnsServers {
-			cmd := exec.Command("scutil", "--set", "DNS", dns)
+			cmd := exec.Command(tool, "--set", "DNS", dns)
 			if err := cmd.Run(); err != nil {
 				return err
 			}
