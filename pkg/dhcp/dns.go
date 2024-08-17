@@ -228,7 +228,6 @@ func getDNSMacos(interfaceName string) ([]string, error) {
 
 			if strings.Contains(line, fmt.Sprintf("(%s)", interfaceName)) {
 				if pendingDNS != "" && !contains(dnsServers, pendingDNS) {
-					fmt.Printf("Found DNS server: %s for interface %s\n", pendingDNS, interfaceName)
 					dnsServers = append(dnsServers, pendingDNS)
 					pendingDNS = ""
 				}
@@ -236,7 +235,7 @@ func getDNSMacos(interfaceName string) ([]string, error) {
 		}
 
 		if len(dnsServers) == 0 {
-			return nil, fmt.Errorf("no DNS servers found for interface %s", interfaceName)
+			return nil, ErrNotFountDNSForInterface
 		}
 		return dnsServers, nil
 	}
