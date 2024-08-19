@@ -1,9 +1,12 @@
 package main
 
 import (
-	"github.com/phuslu/log"
+	grpc2 "github.com/startcodextech/octopuslb/internal/grpc"
 	"github.com/startcodextech/octopuslb/internal/logs"
-	"github.com/startcodextech/octopuslb/pkg/dhcp"
+	"github.com/startcodextech/octopuslb/internal/managers"
+	api "github.com/startcodextech/octopuslb/tools/proto"
+	"google.golang.org/grpc"
+	"net"
 )
 
 func init() {
@@ -11,12 +14,22 @@ func init() {
 }
 
 func main() {
-	interfaces, err := dhcp.GetNetworkInterfaces()
+	lis, err := net.Listen("tcp", ":3000")
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get network interfaces")
+		panic(err)
 	}
 
-	for _, iface := range interfaces {
-		log.Printf("%+v", iface)
+	server := grpc.NewServer()
+
+	dhcpManager, err := managers.NewDHCPManager()
+	if err != nil {
+		panic(err)
+	}
+
+	grpcDHCP := grpc2.New(dhcpManager)
+	api.RegisterDHCPServiceServer(server, grpcDHCP)
+
+	if err := server.Serve(lis); err != nil {
+		panic(err)
 	}
 }
