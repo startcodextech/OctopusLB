@@ -27,8 +27,8 @@ var (
 	DNSGoogle1 = net.ParseIP("8.8.8.8")
 	DNSGoogle2 = net.ParseIP("8.8.4.4")
 
-	// DNSDefault is the default list of DNS servers
-	DNSDefault = []net.IP{DefaultRouter, DNSGoogle1, DNSGoogle2}
+	// DefaultDNS is the default list of DNS servers
+	DefaultDNS = []net.IP{DefaultRouter, DNSGoogle1, DNSGoogle2}
 )
 
 type (
@@ -271,7 +271,7 @@ func (h *DHCPHandler) initializeState(state *State) *State {
 		state.Config.Router = DefaultRouter
 	}
 	if len(state.Config.DNS) == 0 {
-		state.Config.DNS = DNSDefault
+		state.Config.DNS = DefaultDNS
 	}
 	if state.Leases == nil {
 		state.Leases = make(map[string]*Lease)

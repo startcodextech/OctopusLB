@@ -1,13 +1,13 @@
 package grpc
 
 import (
-	"github.com/startcodextech/octopuslb/internal/dhcp"
+	"github.com/startcodextech/octopuslb/internal/managers"
 	api "github.com/startcodextech/octopuslb/tools/proto"
 )
 
 type gRPCServerDHCP struct {
 	api.UnimplementedDHCPServiceServer
-	manager *dhcp.DHCPManager
+	manager *managers.DHCPManager
 }
 
 func (s *gRPCServerDHCP) GetNetworksInterfaces() (*api.ResponseGetNetworkInterfaces, error) {
@@ -38,10 +38,22 @@ func (s *gRPCServerDHCP) GetNetworksInterfaces() (*api.ResponseGetNetworkInterfa
 	return response, nil
 }
 
-func (s *gRPCServerDHCP) ConfigureDHCP() (*api.Response, error) {
+func (s *gRPCServerDHCP) ConfigureDHCP(request *api.RequestConfigureDHCP) (*api.Response, error) {
 	response := &api.Response{
 		Success: true,
 	}
-	err := s.manager.ConfigureDHCP()
 
+	config := managers.DHCPConfig{
+		InterfaceName: request.InterfaceName,
+		IP:            request.Ip,
+	}
+	err := s.manager.ConfigureDHCP(config)
+	if err != nil {
+		errMessage := err.Error()
+		response.Success = false
+		response.Error = &errMessage
+		return response, nil
+	}
+
+	return response, nil
 }

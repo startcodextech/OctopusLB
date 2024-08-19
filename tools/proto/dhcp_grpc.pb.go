@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: proto/dhcp.proto
+// source: proto/managers.proto
 
 package api
 
@@ -20,12 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DHCPService_GetNetworksInterfaces_FullMethodName = "/dhcp.DHCPService/GetNetworksInterfaces"
-	DHCPService_ConfigureDHCP_FullMethodName         = "/dhcp.DHCPService/ConfigureDHCP"
-	DHCPService_Start_FullMethodName                 = "/dhcp.DHCPService/Start"
-	DHCPService_Stop_FullMethodName                  = "/dhcp.DHCPService/Stop"
-	DHCPService_Reload_FullMethodName                = "/dhcp.DHCPService/Reload"
-	DHCPService_GetLeases_FullMethodName             = "/dhcp.DHCPService/GetLeases"
+	DHCPService_GetNetworksInterfaces_FullMethodName = "/managers.DHCPService/GetNetworksInterfaces"
+	DHCPService_ConfigureDHCP_FullMethodName         = "/managers.DHCPService/ConfigureDHCP"
+	DHCPService_Start_FullMethodName                 = "/managers.DHCPService/Start"
+	DHCPService_Stop_FullMethodName                  = "/managers.DHCPService/Stop"
+	DHCPService_Reload_FullMethodName                = "/managers.DHCPService/Reload"
+	DHCPService_GetLeases_FullMethodName             = "/managers.DHCPService/GetLeases"
 )
 
 // DHCPServiceClient is the client API for DHCPService service.
@@ -279,7 +279,7 @@ func _DHCPService_GetLeases_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DHCPService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "dhcp.DHCPService",
+	ServiceName: "managers.DHCPService",
 	HandlerType: (*DHCPServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -308,5 +308,5 @@ var DHCPService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/dhcp.proto",
+	Metadata: "proto/managers.proto",
 }

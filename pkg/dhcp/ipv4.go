@@ -193,7 +193,7 @@ func setIPv4Windows(tool, interfaceName, gateway, ipAddr, ipMask string) error {
 	switch tool {
 	case "netsh":
 		// netsh interface ipv4 set address name="YOUR INTERFACE NAME" static IP_ADDRESS SUBNET_MASK GATEWAY
-		// source=dhcp
+		// source=managers
 		cmd := exec.Command(tool, "interface", "ipv4", "set", "address", `name="`+interfaceName+`"`, "static", ipAddr, ipMask, gateway)
 		return cmd.Run()
 	case "powershell":

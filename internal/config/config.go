@@ -9,19 +9,23 @@ import (
 
 const configFile = "config.json"
 
-var configMutex sync.Mutex
+var (
+	configInstance *Config
+	configMutex    sync.Mutex
+	once           sync.Once
+)
 
 type (
 	Config struct {
-		DHCP DHCPConfig `json:"dhcp"`
+		DHCP *DHCPConfig `json:"managers"`
 	}
 )
 
-func SaveConfig(config *Config) error {
+func SaveConfig() error {
 	configMutex.Lock()
 	defer configMutex.Unlock()
 
-	data, err := json.MarshalIndent(config, "", "  ")
+	data, err := json.MarshalIndent(configInstance, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal config: %w", err)
 	}
@@ -35,23 +39,31 @@ func SaveConfig(config *Config) error {
 }
 
 func LoadConfig() (*Config, error) {
+	var err error
+	once.Do(func() {
+		configInstance, err = loadConfigFromFile()
+		if err != nil {
+			configInstance = &Config{}
+		}
+	})
+	return configInstance, err
+}
+
+func loadConfigFromFile() (*Config, error) {
 	configMutex.Lock()
 	defer configMutex.Unlock()
 
 	data, err := os.ReadFile(configFile)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return &Config{
-				DHCP: DHCPConfig{},
-			}, nil
+			return &Config{}, nil
 		}
 		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}
-
 	var config Config
 	err = json.Unmarshal(data, &config)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal config from load file: %w", err)
 	}
 
 	return &config, nil

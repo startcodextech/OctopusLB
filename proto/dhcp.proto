@@ -35,6 +35,7 @@ message RequestConfigureDHCP {
   int32 mask = 3;
   repeated string ip_range = 4;
   repeated string dns = 5;
+  int32 lease_time = 6;
 }
 
 message Lease {
