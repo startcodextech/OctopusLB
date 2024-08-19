@@ -1,10 +1,8 @@
 package dhcp
 
 import (
-	"encoding/json"
 	"github.com/insomniacslk/dhcp/dhcpv4"
 	"net"
-	"os"
 	"sync"
 	"time"
 )
@@ -68,7 +66,6 @@ type (
 	// DHCPHandler handles DHCP requests.
 	DHCPHandler struct {
 		state      *State
-		filePath   string
 		leaseMutex sync.Mutex
 	}
 )
@@ -82,12 +79,9 @@ type (
 //   - SubnetMask: 255.255.255.0
 //   - Router: 192.168.200.1
 //   - DNS: 192.168.200.1 - 8.8.8.8 - 8.8.4.4
-func NewDHCPHandler(filePath string) *DHCPHandler {
-	handler := &DHCPHandler{
-		state:    &State{Leases: make(map[string]*Lease)},
-		filePath: filePath,
-	}
-
+func NewDHCPHandler(state *State) *DHCPHandler {
+	handler := &DHCPHandler{}
+	handler.state = handler.initializeState(state)
 	return handler
 }
 
@@ -150,7 +144,6 @@ func (h *DHCPHandler) handleDiscover(request *dhcpv4.DHCPv4) (*dhcpv4.DHCPv4, er
 		Expire: expire,
 	}
 
-	h.SaveToFile()
 	return response, nil
 }
 
@@ -176,7 +169,6 @@ func (h *DHCPHandler) handleRequest(request *dhcpv4.DHCPv4) (*dhcpv4.DHCPv4, err
 		if err != nil {
 			return nil, err
 		}
-		h.SaveToFile()
 		return response, nil
 	}
 
@@ -249,52 +241,19 @@ func (h *DHCPHandler) StartLeaseCleanup(interval time.Duration) {
 	}()
 }
 
-// SaveToFile saves the leases to a file.
-func (h *DHCPHandler) SaveToFile() error {
-	h.leaseMutex.Lock()
-	defer h.leaseMutex.Unlock()
-
-	data, err := json.Marshal(h.state)
-	if err != nil {
-		return err
-	}
-
-	file, err := os.OpenFile(h.filePath, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	_, err = file.Write(data)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (h *DHCPHandler) Reload(state *State) {
+	h.state = h.initializeState(state)
 }
 
-// LoadFromFile loads the leases from a file.
-func (h *DHCPHandler) LoadFromFile() error {
-	h.leaseMutex.Lock()
-	defer h.leaseMutex.Unlock()
-
-	file, err := os.OpenFile(h.filePath, os.O_RDONLY, 0644)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
+func (h *DHCPHandler) initializeState(state *State) *State {
+	if state == nil {
+		state = &State{}
 	}
-	defer file.Close()
-
-	var state State
-	err = json.NewDecoder(file).Decode(&state)
-	if err != nil {
-		return err
-	}
-
 	if state.Config == nil {
 		state.Config = &Config{}
+	}
+	if state.Leases == nil {
+		state.Leases = make(map[string]*Lease)
 	}
 	if state.Config.LeaseDuration == 0 {
 		state.Config.LeaseDuration = DefaultLeaseDuration
@@ -314,10 +273,8 @@ func (h *DHCPHandler) LoadFromFile() error {
 	if len(state.Config.DNS) == 0 {
 		state.Config.DNS = DNSDefault
 	}
-	if state.Leases == nil || len(state.Leases) == 0 {
+	if state.Leases == nil {
 		state.Leases = make(map[string]*Lease)
 	}
-
-	h.state = &state
-	return nil
+	return state
 }

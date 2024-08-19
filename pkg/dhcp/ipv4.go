@@ -123,7 +123,7 @@ func isPhysicalInterface(iface net.Interface) bool {
 				return false
 			}
 		}
-		return true //strings.HasPrefix(iface.Name, "en")
+		return true //strings.HasPrefix(interfaceName.Name, "en")
 	case "linux":
 		excludedPrefixes := excludedPrefixesLinux
 		for _, prefix := range excludedPrefixes {

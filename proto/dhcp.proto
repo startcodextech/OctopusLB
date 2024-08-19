@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "github.com/startcodextech/octopuslb/tools/proto/api;api";
+
+package dhcp;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "proto/generic.proto";
+
+service DHCPService {
+  rpc GetNetworksInterfaces(google.protobuf.Empty) returns (ResponseGetNetworkInterfaces) {}
+  rpc ConfigureDHCP(RequestConfigureDHCP) returns (generic.Response) {}
+  rpc Start(google.protobuf.Empty) returns (generic.Response) {}
+  rpc Stop(google.protobuf.Empty) returns (generic.Response) {}
+  rpc Reload(google.protobuf.Empty) returns (generic.Response) {}
+  rpc GetLeases(google.protobuf.Empty) returns (ResponseGetLeases) {}
+}
+
+message NetworkInterface {
+  string name = 1;
+  string alias = 2;
+  string mac_address = 3;
+  string ip = 4;
+  string mask = 5;
+  string gateway = 6;
+  repeated string dns = 7;
+  bool up = 8;
+}
+
+message RequestConfigureDHCP {
+  string interface_name = 1;
+  string ip = 2;
+  int32 mask = 3;
+  repeated string ip_range = 4;
+  repeated string dns = 5;
+}
+
+message Lease {
+  string mac_address = 1;
+  string ip = 2;
+  google.protobuf.Timestamp expire = 3;
+}
+
+message ResponseGetNetworkInterfaces {
+  bool success = 1;
+  string error = 2;
+  repeated NetworkInterface data = 3;
+}
+
+message ResponseGetLeases {
+  bool success = 1;
+  string error = 2;
+  repeated Lease data = 3;
+}

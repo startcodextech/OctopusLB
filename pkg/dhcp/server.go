@@ -1,6 +1,7 @@
 package dhcp
 
 import (
+	"errors"
 	"github.com/insomniacslk/dhcp/dhcpv4/server4"
 	"github.com/phuslu/log"
 	"net"
@@ -9,30 +10,35 @@ import (
 )
 
 const (
-	SIGNAL_STOP         = "stop"
-	SIGNAL_CHANGE_IFACE = "change_iface"
-	SIGNAL_RELOAD       = "reload"
+	SIGNAL_STOP                     = "stop"
+	SIGNAL_CHANGE_NETWORK_INTERFACE = "change_network_interface"
+	SIGNAL_RELOAD                   = "reload"
+)
+
+var (
+	ErrEmptyInterfaceName = errors.New("interface name is empty")
 )
 
 type (
 	DHCPServer struct {
-		handler    *DHCPHandler
-		iface      string
-		conn       net.PacketConn
-		server     *server4.Server
-		signalChan chan Signal
-		wg         sync.WaitGroup
-		stopChan   chan struct{}
+		handler       *DHCPHandler
+		interfaceName string
+		conn          net.PacketConn
+		server        *server4.Server
+		signalChan    chan Signal
+		wg            sync.WaitGroup
+		stopChan      chan struct{}
 	}
 
 	Signal struct {
-		Name  string
-		Iface string
+		Name          string
+		InterfaceName string
+		State         *State
 	}
 )
 
-func NewServer() (*DHCPServer, error) {
-	handler := NewDHCPHandler("")
+func NewServer(netInterface string, state *State) (*DHCPServer, error) {
+	handler := NewDHCPHandler(state)
 
 	conn, err := net.ListenPacket("udp4", ":67")
 	if err != nil {
@@ -44,15 +50,22 @@ func NewServer() (*DHCPServer, error) {
 	}
 
 	return &DHCPServer{
-		handler:    handler,
-		iface:      "",
-		conn:       conn,
-		signalChan: make(chan Signal),
-		stopChan:   make(chan struct{}),
+		handler:       handler,
+		interfaceName: netInterface,
+		conn:          conn,
+		signalChan:    make(chan Signal),
+		stopChan:      make(chan struct{}),
 	}, nil
 }
 
 func (s *DHCPServer) Start() error {
+	if s.interfaceName == "" {
+		log.Error().
+			Str("service", "dhcp").
+			Msg("Interface name is empty")
+		return ErrEmptyInterfaceName
+	}
+
 	s.wg.Add(1)
 	defer s.wg.Done()
 
@@ -61,7 +74,7 @@ func (s *DHCPServer) Start() error {
 		Port: 67,
 	}
 
-	server, err := server4.NewServer(s.iface, addr, s.handler.Handle)
+	server, err := server4.NewServer(s.interfaceName, addr, s.handler.Handle)
 	if err != nil {
 		log.Error().
 			Str("service", "dhcp").
@@ -74,7 +87,7 @@ func (s *DHCPServer) Start() error {
 
 	log.Info().
 		Str("service", "dhcp").
-		Msg("Starting DHCP server on interface " + s.iface)
+		Msg("Starting DHCP server on interface " + s.interfaceName)
 
 	go func() {
 		if err := server.Serve(); err != nil {
@@ -95,13 +108,13 @@ func (s *DHCPServer) handleSignal() error {
 		select {
 		case sig := <-s.signalChan:
 			switch sig.Name {
-			case "stop":
+			case SIGNAL_STOP:
 				log.Info().
 					Str("service", "dhcp").
 					Msg("Shutting down DHCP server...")
 				return s.Stop()
-			case "change_iface":
-				newIface := sig.Iface
+			case SIGNAL_CHANGE_NETWORK_INTERFACE:
+				newIface := sig.InterfaceName
 				log.Info().
 					Str("service", "dhcp").
 					Msg("Changing interface to " + newIface)
@@ -111,16 +124,11 @@ func (s *DHCPServer) handleSignal() error {
 						Err(err).
 						Msg("Failed to change interface")
 				}
-			case "reload":
+			case SIGNAL_RELOAD:
 				log.Info().
 					Str("service", "dhcp").
 					Msg("Reloading DHCP server configuration...")
-				if err := s.Reload(); err != nil {
-					log.Error().
-						Str("service", "dhcp").
-						Err(err).
-						Msg("Failed to reload DHCP server configuration")
-				}
+				s.Reload(sig.State)
 			}
 		case <-s.stopChan:
 			log.Info().
@@ -134,32 +142,27 @@ func (s *DHCPServer) handleSignal() error {
 func (s *DHCPServer) Stop() error {
 	log.Info().
 		Str("service", "dhcp").
-		Msgf("Stopping DHCP server on interface %s...", s.iface)
+		Msgf("Stopping DHCP server on interface %s...", s.interfaceName)
 	close(s.stopChan)
 	return s.conn.Close()
 }
 
-func (s *DHCPServer) Reload() error {
+func (s *DHCPServer) Reload(state *State) {
 	log.Info().
 		Str("service", "dhcp").
 		Msg("Reloading DHCP server configuration...")
 
-	// Recargar el estado desde el archivo (configuración y arrendamientos)
-	if err := s.handler.LoadFromFile(); err != nil {
-		log.Printf("Failed to reload state: %v", err)
-		return err
-	}
+	s.handler.Reload(state)
 
 	log.Info().
 		Str("service", "dhcp").
 		Msg("DHCP server configuration reloaded successfully.")
-	return nil
 }
 
 func (s *DHCPServer) ChangeInterface(newIface string) error {
 	log.Info().
 		Str("service", "dhcp").
-		Msgf("Changing interface from %s to %s...", s.iface, newIface)
+		Msgf("Changing interface from %s to %s...", s.interfaceName, newIface)
 	err := s.Stop()
 	if err != nil {
 		log.Error().
@@ -178,16 +181,21 @@ func (s *DHCPServer) ChangeInterface(newIface string) error {
 		return err
 	}
 
-	s.iface = newIface
+	s.interfaceName = newIface
 	s.conn = conn
 
 	return s.Start()
 }
 
-func (s *DHCPServer) SendSignal(signalName string, iface ...string) {
+func (s *DHCPServer) SendSignal(signalName string, interfaceName *string, state *State) {
 	sig := Signal{Name: signalName}
-	if len(iface) > 0 {
-		sig.Iface = iface[0]
+	if interfaceName != nil {
+		if *interfaceName != "" {
+			sig.InterfaceName = *interfaceName
+		}
+	}
+	if state != nil {
+		sig.State = state
 	}
 	s.signalChan <- sig
 }

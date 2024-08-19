@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "github.com/startcodextech/octopuslb/tools/proto/api;api";
+
+package generic;
+
+message Response {
+  bool success = 1;
+  optional string error = 2;
+}
