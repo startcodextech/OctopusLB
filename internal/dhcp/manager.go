@@ -22,6 +22,19 @@ func NewDHCPManager() (*DHCPManager, error) {
 	}, nil
 }
 
+func (m *DHCPManager) GetNetworksInterfaces() ([]dhcp.NetworkInterface, error) {
+	return dhcp.GetNetworkInterfaces()
+}
+
+func (m *DHCPManager) ConfigureDHCP() error {
+	server, err := dhcp.NewServer()
+	if err != nil {
+		return err
+	}
+	m.server = server
+	return nil
+}
+
 func (m *DHCPManager) ChangeNetworkInterface(name string) error {
 	return m.server.ChangeInterface(name)
 }
