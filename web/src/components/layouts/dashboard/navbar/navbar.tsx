@@ -16,7 +16,7 @@ const Navbar: FC<Props> = (props) => {
     return (
         <>
             <header
-                className="sticky top-0 z-50 flex w-full bg-white drop-shadow">
+                className="sticky top-0 z-40 flex w-full bg-white drop-shadow">
                 <div className="flex flex-grow items-center justify-between px-4 py-2 shadow-2 md:px-6 2xl:px-11">
                     <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
                         <ToggleSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>

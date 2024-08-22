@@ -8,6 +8,9 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      redhat: ['Red Hat Display', 'sans-serif'],
+    },
     extend: {
       screens: {
         '2xsm': '375px',

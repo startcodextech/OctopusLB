@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build && node folder-public.js",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next && rm -rf build"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
