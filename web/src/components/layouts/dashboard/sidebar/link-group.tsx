@@ -1,12 +1,12 @@
 'use client';
-import React, {FC, PropsWithChildren, ReactNode, useState} from "react";
+import React, {FC, ReactNode, useState} from "react";
 
-type Props = PropsWithChildren<{
+type Props = {
     children: (handleClick: () => void, open: boolean) => ReactNode;
     active?: boolean;
-}>;
+};
 
-const LinkItemMenu: FC<Props> = (props) => {
+const LinkGroup: FC<Props> = (props) => {
     const {children, active = false} = props;
 
     const [open, setOpen] = useState(active);
@@ -22,4 +22,4 @@ const LinkItemMenu: FC<Props> = (props) => {
     )
 }
 
-export default LinkItemMenu;
+export default LinkGroup;

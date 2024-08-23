@@ -2,6 +2,7 @@
 import React, {FC, useEffect, useRef, Fragment} from 'react';
 import {usePathname} from "next/navigation";
 import Link from 'next/link';
+import LinkGroup from "@components/layouts/dashboard/sidebar/link-group";
 
 type Props = {
     open: boolean;
@@ -94,24 +95,38 @@ const Sidebar: FC<Props> = (props) => {
                                         Inicio
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        href="/dhcp"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className={`icon-rj45${pathname.includes("dhcp") ? '-fill' : ''} text-2xl`}/>
-                                        Load Balancer
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/dhcp"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className={`icon-rj45${pathname.includes("dhcp") ? '-fill' : ''} text-2xl`}/>
-                                        DHCP
-                                    </Link>
-                                </li>
+                                <LinkGroup active={true}>
+                                    {(handleClick, open) => {
+                                        return (
+                                            <Fragment>
+                                                <Link href="/dhcp" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    expanded ? handleClick() : setExpanded(true);
+                                                }}>
+                                                    <i className="icon-dissolving text-2xl mr-4"/>
+                                                    Modules
+                                                </Link>
+
+                                                <div
+                                                    className={`translate transform overflow-hidden ${
+                                                        !open && 'hidden'
+                                                    }`}
+                                                >
+                                                    <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                                        <li>
+                                                            <Link href="/dhcp"
+                                                                  className={'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                                                      (pathname.includes('dhcp') && '!text-white')
+                                                                  }>
+                                                                DHCP
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </Fragment>
+                                        );
+                                    }}
+                                </LinkGroup>
                             </ul>
                         </div>
                     </div>
