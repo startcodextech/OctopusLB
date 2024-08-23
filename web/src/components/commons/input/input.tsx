@@ -28,7 +28,6 @@ const Input: FC<Props> = (props) => {
     }
 
     const handleFocus = (e: FocusEvent<HTMLDivElement>) => {
-        console.log('focus')
         setFocused(true);
         if (inputRef.current) {
             inputRef.current.focus();
@@ -61,9 +60,9 @@ const Input: FC<Props> = (props) => {
                     <div className="flex items-center justify-between">
                         <input ref={inputRef} {...rest}
                                type={showPassword ? 'text' : 'password'}
-                               className="border-none focus:ring-0 bg-transparent px-5 py-2.5 text-base font-medium outline-none placeholder:text-gray-500 text-black"/>
+                               className="w-full border-none focus:ring-0 bg-transparent pl-5 pr-0 py-2.5 text-base font-medium outline-none placeholder:text-gray-500 text-black"/>
                         <span onClick={handleShowPassword}
-                              className="px-5 py-2.5 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
+                              className="px-3 py-2.5 cursor-pointer rounded-tr-2xl rounded-br-2xl bg-transparent">
                             {showPassword ? (<>
                                 <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">

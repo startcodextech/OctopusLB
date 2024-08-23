@@ -11,6 +11,8 @@ import (
 
 var (
 	ErrNotFoundNetworkInterface = errors.New("network interface not found")
+	ErrDHCPNotConfigured        = errors.New("DHCP not configured")
+	ErrDHCPNotStarted           = errors.New("DHCP not started")
 )
 
 type (
@@ -119,6 +121,33 @@ func (m *DHCPManager) ConfigureDHCP(setup DHCPConfig) error {
 	}
 
 	return m.save()
+}
+
+func (m *DHCPManager) Start() error {
+	if m.server == nil {
+		return ErrDHCPNotConfigured
+	}
+	err := m.server.Start()
+	if err != nil {
+		return fmt.Errorf("failed to start DHCP server: %w", err)
+	}
+	m.isStarted = true
+	return nil
+}
+
+func (m *DHCPManager) Stop() error {
+	if m.server == nil {
+		return ErrDHCPNotConfigured
+	}
+	if !m.isStarted {
+		return ErrDHCPNotStarted
+	}
+	err := m.server.Stop()
+	if err != nil {
+		return fmt.Errorf("failed to stop DHCP server: %w", err)
+	}
+	m.isStarted = false
+	return nil
 }
 
 func (m *DHCPManager) validateExistsNetInterface(name string) (*dhcp.NetworkInterface, error) {
