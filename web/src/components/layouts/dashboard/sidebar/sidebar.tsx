@@ -3,6 +3,7 @@ import React, {FC, useEffect, useRef, Fragment} from 'react';
 import {usePathname} from "next/navigation";
 import Link from 'next/link';
 import LinkGroup from "@components/layouts/dashboard/sidebar/link-group";
+import Image from "next/image";
 
 type Props = {
     open: boolean;
@@ -52,81 +53,110 @@ const Sidebar: FC<Props> = (props) => {
         <>
             <aside
                 ref={sidebar}
-                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-primary duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex items-center justify-between gap-2 px-6 py-5 lg:py-6">
+                    <Link href="/" className="flex items-center font-black text-[24px]">
+                        <Image src="/images/logo.png" className="mr-3" alt="Octopus LB" width={36} height={36}/>
+                        Octopus LB
+                    </Link>
+
                     <button
                         ref={trigger}
                         onClick={() => toggle(!open)}
                         aria-controls="sidebar"
                         aria-expanded={open}
-                        className="block lg:hidden"
+                        className="block"
                     >
-                        <svg
-                            className="fill-current"
-                            width="20"
-                            height="18"
-                            viewBox="0 0 20 18"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
+                        <svg className="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path
-                                d="M19 8.175H2.98748L9.36248 1.6875C9.69998 1.35 9.69998 0.825 9.36248 0.4875C9.02498 0.15 8.49998 0.15 8.16248 0.4875L0.399976 8.3625C0.0624756 8.7 0.0624756 9.225 0.399976 9.5625L8.16248 17.4375C8.31248 17.5875 8.53748 17.7 8.76248 17.7C8.98748 17.7 9.17498 17.625 9.36248 17.475C9.69998 17.1375 9.69998 16.6125 9.36248 16.275L3.02498 9.8625H19C19.45 9.8625 19.825 9.4875 19.825 9.0375C19.825 8.55 19.45 8.175 19 8.175Z"
-                                fill=""
-                            />
+                                d="M23.0625 11.0625H0.9375C0.419719 11.0625 0 11.4822 0 12C0 12.5178 0.419719 12.9375 0.9375 12.9375H23.0625C23.5803 12.9375 24 12.5178 24 12C24 11.4822 23.5803 11.0625 23.0625 11.0625Z"
+                                fill=""/>
+                            <path
+                                d="M23.0625 3.5625H0.9375C0.419719 3.5625 0 3.98222 0 4.5C0 5.01778 0.419719 5.4375 0.9375 5.4375H23.0625C23.5803 5.4375 24 5.01778 24 4.5C24 3.98222 23.5803 3.5625 23.0625 3.5625Z"
+                                fill=""/>
+                            <path
+                                d="M23.0625 18.5625H0.9375C0.419719 18.5625 0 18.9822 0 19.5C0 20.0178 0.419719 20.4375 0.9375 20.4375H23.0625C23.5803 20.4375 24 20.0178 24 19.5C24 18.9822 23.5803 18.5625 23.0625 18.5625Z"
+                                fill=""/>
                         </svg>
                     </button>
                 </div>
 
                 <div className="no-scrollbar flex flex-col overflow-y-auto duration-200 ease-linear">
-                    <div className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
+                    <div className="mt-5 py-4 lg:mt-9">
                         <div>
-                            <h3 className="mb-4 ml-4 text-sm font-semibold">
-                                MENU
-                            </h3>
-
                             <ul className="mb-6 flex flex-col gap-1.5">
+                                {
+                                    [
+                                        {text: 'Inicio', icon: 'icon-dashboard', href: '/'},
+                                        {text: 'Load Balancer', icon: 'icon-balancer', href: '/balancer'},
+                                        {text: 'DHCP', icon: 'icon-dhcp', href: '/dhcp'},
+                                        {text: 'Firewall', icon: 'icon-firewall', href: '/firewall'},
+                                        {text: 'DNS', icon: 'icon-dns', href: '/dns'},
+                                        {text: 'BGP', icon: 'icon-bgp', href: '/bgp'},
+                                    ].map((item, index) => {
+
+                                        const isActive = item.href === '/' ? pathname === item.href : pathname.includes(item.href);
+
+                                        return (
+                                            <li key={index}
+                                                className={`group font-medium px-4 lg:px-6 ${isActive ? 'text-black' : 'text-sidebar-text'} hover:text-black cursor-pointer duration-100 ease-in-out`}>
+                                                <Link
+                                                    href={item.href}
+                                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4`}
+                                                >
+                                                    <i className={`${item.icon} group-hover:text-black text-2xl ${isActive ? 'text-black' : 'text-sidebar-icon'}`}/>
+                                                    {item.text}
+                                                </Link>
+                                            </li>
+                                        )
+                                    })
+                                }
                                 <li>
                                     <Link
-                                        href="/"
+                                        href="/balancer"
                                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
                                     >
-                                        <i className={`icon-home${pathname === "/" ? '-fill' : ''} text-2xl`}/>
-                                        Inicio
+                                        <i className="icon-balancer"/>
+                                        Load Balancer
                                     </Link>
                                 </li>
-                                <LinkGroup active={true}>
-                                    {(handleClick, open) => {
-                                        return (
-                                            <Fragment>
-                                                <Link href="/dhcp" onClick={(e) => {
-                                                    e.preventDefault();
-                                                    expanded ? handleClick() : setExpanded(true);
-                                                }}>
-                                                    <i className="icon-dissolving text-2xl mr-4"/>
-                                                    Modules
-                                                </Link>
-
-                                                <div
-                                                    className={`translate transform overflow-hidden ${
-                                                        !open && 'hidden'
-                                                    }`}
-                                                >
-                                                    <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                                                        <li>
-                                                            <Link href="/dhcp"
-                                                                  className={'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                      (pathname.includes('dhcp') && '!text-white')
-                                                                  }>
-                                                                DHCP
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </Fragment>
-                                        );
-                                    }}
-                                </LinkGroup>
+                                <li>
+                                    <Link
+                                        href="/dhcp"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
+                                    >
+                                        <i className="icon-dhcp"/>
+                                        DHCP
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/firewall"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
+                                    >
+                                        <i className="icon-firewall"/>
+                                        Firewall
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/dns"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-sidebar ${pathname.includes("dhcp") && 'bg-graydark'}`}
+                                    >
+                                        <i className="icon-dns"/>
+                                        DNS
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/bgp"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
+                                    >
+                                        <i className="icon-bgp"/>
+                                        BGP
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>

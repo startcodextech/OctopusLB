@@ -24,24 +24,42 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-database:before {
-    content: "\e904";
-}
-.icon-database-fill:before {
-    content: "\e905";
-}
-.icon-dissolving:before {
+.icon-remove:before {
     content: "\e906";
 }
-.icon-rj45:before {
+.icon-add:before {
+    content: "\e907";
+}
+.icon-edit:before {
+    content: "\e908";
+}
+.icon-play:before {
+    content: "\e909";
+}
+.icon-refresh:before {
+    content: "\e90a";
+}
+.icon-pause:before {
+    content: "\e90b";
+}
+.icon-setting:before {
+    content: "\e90c";
+}
+.icon-bgp:before {
     content: "\e900";
 }
-.icon-rj45-fill:before {
+.icon-firewall:before {
     content: "\e901";
 }
-.icon-home:before {
+.icon-dns:before {
     content: "\e902";
 }
-.icon-home-fill:before {
+.icon-dhcp:before {
     content: "\e903";
+}
+.icon-balancer:before {
+    content: "\e904";
+}
+.icon-dashboard:before {
+    content: "\e905";
 }
