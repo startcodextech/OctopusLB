@@ -1,9 +1,10 @@
 'use client';
-import React, {FC, useEffect, useRef, Fragment} from 'react';
+import React, {FC, useEffect, useRef, useContext} from 'react';
 import {usePathname} from "next/navigation";
 import Link from 'next/link';
-import LinkGroup from "@components/layouts/dashboard/sidebar/link-group";
 import Image from "next/image";
+import {Context} from "@components/layouts/dashboard/dashboard";
+import {useTranslation} from "@app/i18n/client";
 
 type Props = {
     open: boolean;
@@ -15,8 +16,13 @@ const Sidebar: FC<Props> = (props) => {
 
     const pathname = usePathname();
 
+    const context = useContext(Context);
+    const {lng} = context;
+
     const trigger = useRef<HTMLButtonElement>(null);
     const sidebar = useRef<HTMLElement>(null);
+
+    const {t} = useTranslation(lng, 'menu');
 
     const [expanded, setExpanded] = React.useState<boolean>(false);
 
@@ -88,12 +94,12 @@ const Sidebar: FC<Props> = (props) => {
                             <ul className="mb-6 flex flex-col gap-1.5">
                                 {
                                     [
-                                        {text: 'Inicio', icon: 'icon-dashboard', href: '/'},
-                                        {text: 'Load Balancer', icon: 'icon-balancer', href: '/balancer'},
-                                        {text: 'DHCP', icon: 'icon-dhcp', href: '/dhcp'},
-                                        {text: 'Firewall', icon: 'icon-firewall', href: '/firewall'},
-                                        {text: 'DNS', icon: 'icon-dns', href: '/dns'},
-                                        {text: 'BGP', icon: 'icon-bgp', href: '/bgp'},
+                                        {text: t('dashboard'), icon: 'icon-dashboard', href: '/'},
+                                        {text: t('balancer'), icon: 'icon-balancer', href: '/balancer'},
+                                        {text: t('dhcp'), icon: 'icon-dhcp', href: '/dhcp'},
+                                        {text: t('firewall'), icon: 'icon-firewall', href: '/firewall'},
+                                        {text: t('dns'), icon: 'icon-dns', href: '/dns'},
+                                        {text: t('bgp'), icon: 'icon-bgp', href: '/bgp'},
                                     ].map((item, index) => {
 
                                         const isActive = item.href === '/' ? pathname === item.href : pathname.includes(item.href);
@@ -102,7 +108,7 @@ const Sidebar: FC<Props> = (props) => {
                                             <li key={index}
                                                 className={`group font-medium px-4 lg:px-6 ${isActive ? 'text-black' : 'text-sidebar-text'} hover:text-black cursor-pointer duration-100 ease-in-out`}>
                                                 <Link
-                                                    href={item.href}
+                                                    href={`/${lng}${item.href}`}
                                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4`}
                                                 >
                                                     <i className={`${item.icon} group-hover:text-black text-2xl ${isActive ? 'text-black' : 'text-sidebar-icon'}`}/>
@@ -112,51 +118,6 @@ const Sidebar: FC<Props> = (props) => {
                                         )
                                     })
                                 }
-                                <li>
-                                    <Link
-                                        href="/balancer"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className="icon-balancer"/>
-                                        Load Balancer
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/dhcp"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className="icon-dhcp"/>
-                                        DHCP
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/firewall"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className="icon-firewall"/>
-                                        Firewall
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/dns"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-sidebar ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className="icon-dns"/>
-                                        DNS
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/bgp"
-                                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:bg-graydark ${pathname.includes("dhcp") && 'bg-graydark'}`}
-                                    >
-                                        <i className="icon-bgp"/>
-                                        BGP
-                                    </Link>
-                                </li>
                             </ul>
                         </div>
                     </div>
