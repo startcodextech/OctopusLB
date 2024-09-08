@@ -6,6 +6,21 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/modules/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  safelist: [
+    {
+      pattern: /bg-chip-(success|warning|error)-(background|dot|text)/,
+    },
+    {
+      pattern: /text-chip-(success|warning|error)-(background|dot|text)/
+    },
+    {
+      pattern: /bg-primary-(50|100|200|300|400|500|600|700|800|900)/,
+    },
+    {
+      pattern: /text-primary-(50|100|200|300|400|500|600|700|800|900)/
+    }
   ],
   theme: {
     fontFamily: {
@@ -36,9 +51,35 @@ const config: Config = {
           800: '#200b51',
           900: '#100528',
         },
-        sidebar: '#f6f7fa',
-        'sidebar-text': '#A4A4AD',
-        'sidebar-icon': '#767783',
+        sidebar: {
+          background: '#F6F7FA',
+          icon: '#767783',
+          text: '#A4A4AD',
+        },
+        neutral: {
+          background: '#F0F0F6',
+        },
+        text: {
+          primary: '#080D30',
+          secondary: '#5C5C74',
+        },
+        chip: {
+          success: {
+            background: '#CEEFDFFF',
+            text: '#458850FF',
+            dot: '#34C759FF',
+          },
+          warning: {
+            background: '#FFF4B3FF', // Fondo warning
+            text: '#886D1CFF',        // Texto warning
+            dot: '#FFC734FF',         // Punto warning
+          },
+          error: {
+            background: '#FFDDDDFF', // Fondo error
+            text: '#9F2F2FFF',         // Texto error
+            dot: '#FF4545FF',          // Punto error
+          },
+        }
       },
     },
   },

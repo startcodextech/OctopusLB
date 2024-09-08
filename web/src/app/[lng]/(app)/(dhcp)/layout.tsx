@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {useTranslation} from "@app/i18n";
+import {Chip} from "@components/commons";
 
 const RootLayout = async ({children, params: {lng}}: Readonly<{ children: React.ReactNode; params: {lng: string}}>) => {
     const { t } = await useTranslation(lng, "dhcp")
@@ -7,16 +8,26 @@ const RootLayout = async ({children, params: {lng}}: Readonly<{ children: React.
     return (
         <>
             <div className="flex items-center">
-                <div className="flex items-center gap-2 w-full">
-                    <Image src="/images/dhcp.png" alt="" width={44} height={44}/>
-                    <span className="text-2xl text-[#080D30] font-bold">{t("name")}</span>
-                    <div className="flex items-center gap-2 py-0 px-4 bg-[#CEEFDF] text-[#458850] text-sm leading-6 rounded-lg">
-                        <div className="rounded-full w-2.5 h-2.5 bg-[#34C759]"/>
-                        Starting
-                    </div>
+                <div className="flex items-center gap-2 w-full text-text-primary">
+                    <Image src="/images/dhcp.svg" alt="" width={44} height={44}/>
+                    <span className="text-2xl text-text-primary font-bold">{t("name")}</span>
+                    <Chip type="error" showDot={true}>Starting</Chip>
                 </div>
 
-                aaaa
+                <div className="flex items-center flex-row gap-2">
+                    <button
+                        className="w-11 h-11 flex items-center justify-center p-2.5 rounded-[0.5rem] border-2 bg-white border-neutral-background hover:bg-neutral-background">
+                        <i className="icon-play text-2xl"/>
+                    </button>
+                    <button
+                        className="w-11 h-11 flex items-center justify-center p-2.5 rounded-[0.5rem] border-2 bg-white border-neutral-background hover:bg-neutral-background">
+                        <i className="icon-pause text-2xl"/>
+                    </button>
+                    <button
+                        className="w-11 h-11 flex items-center justify-center p-2.5 rounded-[0.5rem] border-2 bg-white border-neutral-background hover:bg-neutral-background">
+                        <i className="icon-refresh text-2xl"/>
+                    </button>
+                </div>
 
             </div>
             {children}

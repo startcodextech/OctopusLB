@@ -1,6 +1,6 @@
 'use client';
 import React, {FC, useContext} from 'react';
-import {Input, Label} from "@components/commons";
+import {Button, Input, Label} from "@components/commons";
 import {useTranslation} from "@app/i18n/client";
 
 type Props = {
@@ -26,7 +26,9 @@ const LoginForm: FC<Props> = ({lng}) => {
                     <Input type="password" id="password" placeholder="123456"
                            fullWidth={true}/>
                 </div>
-                <div className="mt-12 mb-6 flex justify-center">
+                <div className="mt-12 mb-6 flex justify-center flex-col">
+                    <Button full="true">{t('login')}</Button>
+                    <br/>
                     <button
                         className="w-full bg-primary-500 text-white px-6 py-5 text-sm font-bold leading-none transition duration-300 md:w-full rounded-xl hover:bg-primary-600 focus:ring-4 focus:ring-primary-100">
                         {t('login')}

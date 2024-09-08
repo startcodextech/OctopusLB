@@ -11,6 +11,12 @@ type Props = {
     toggle: (open: boolean) => void;
 };
 
+const Active: FC = () => (
+    <>
+        <div className="absolute left-0 h-full w-1 bg-primary-500 rounded-tr-xl rounded-br-xl"/>
+    </>
+)
+
 const Sidebar: FC<Props> = (props) => {
     const {open, toggle} = props;
 
@@ -59,7 +65,7 @@ const Sidebar: FC<Props> = (props) => {
         <>
             <aside
                 ref={sidebar}
-                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar-background duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex items-center justify-between gap-2 px-6 py-5 lg:py-6">
                     <Link href="/" className="flex items-center font-black text-[24px]">
@@ -106,7 +112,8 @@ const Sidebar: FC<Props> = (props) => {
 
                                         return (
                                             <li key={index}
-                                                className={`group font-medium px-4 lg:px-6 ${isActive ? 'text-black' : 'text-sidebar-text'} hover:text-black cursor-pointer duration-100 ease-in-out`}>
+                                                className={`group relative font-medium px-4 lg:px-6 ${isActive ? 'bg-primary-50' : ''} ${isActive ? 'text-black !font-bold' : 'text-sidebar-text'} hover:text-black cursor-pointer ease-in-out`}>
+                                                {isActive && <Active/>}
                                                 <Link
                                                     href={`/${lng}${item.href}`}
                                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4`}
