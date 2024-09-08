@@ -1,8 +1,12 @@
 import Image from 'next/image';
 import {LoginForm} from "@modules/auth/components";
-import {version} from "../../../package.json";
+import {version} from "../../../../../package.json";
+import {useTranslation} from "@app/i18n";
 
-export default function Login() {
+export default async function Login({params: {lng}}: {params: {lng: string}}) {
+
+    const {t} = await useTranslation(lng, 'login');
+
     return (
         <>
             <div className="container max-w-lg w-full mx-auto pt-8">
@@ -14,10 +18,10 @@ export default function Login() {
                         </h2>
                     </div>
                     <h3 className="text-center mb-4">
-                        Login to your account
+                        {t('subtitle')}
                     </h3>
 
-                    <LoginForm/>
+                    <LoginForm lng={lng}/>
                 </div>
             </div>
 

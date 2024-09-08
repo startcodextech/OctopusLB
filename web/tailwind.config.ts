@@ -22,8 +22,9 @@ const config: Config = {
         redhat: ['Red Hat Display', 'sans-serif'],
       },
       colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
         primary: {
-          DEFAULT: '#511CCC',
           50: '#f6f3fc',
           100: '#d5c8f2',
           200: '#b49de9',
