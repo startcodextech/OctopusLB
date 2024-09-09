@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {useTranslation} from "@app/i18n";
-import {Chip} from "@components/commons";
+import {Button, Chip} from "@components/commons";
 
 const RootLayout = async ({children, params: {lng}}: Readonly<{ children: React.ReactNode; params: {lng: string}}>) => {
     const { t } = await useTranslation(lng, "dhcp")
@@ -15,9 +15,10 @@ const RootLayout = async ({children, params: {lng}}: Readonly<{ children: React.
                 </div>
 
                 <div className="flex items-center flex-row gap-2">
+                    <Button variant="outline" width="11"><i className="icon-play text-2xl"/></Button>
                     <button
                         className="w-11 h-11 flex items-center justify-center p-2.5 rounded-[0.5rem] border-2 bg-white border-neutral-background hover:bg-neutral-background">
-                        <i className="icon-play text-2xl"/>
+
                     </button>
                     <button
                         className="w-11 h-11 flex items-center justify-center p-2.5 rounded-[0.5rem] border-2 bg-white border-neutral-background hover:bg-neutral-background">
