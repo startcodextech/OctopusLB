@@ -27,7 +27,7 @@ const LoginForm: FC<Props> = ({lng}) => {
                            fullWidth={true}/>
                 </div>
                 <div className="mt-12 mb-6 flex justify-center flex-col">
-                    <Button full="true">{t('login')}</Button>
+                    <Button width="true">{t('login')}</Button>
                 </div>
             </form>
         </>

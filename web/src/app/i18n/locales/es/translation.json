@@ -1,3 +1,6 @@
 {
-  "running": "Ejecutando"
+  "starting": "Iniciando",
+  "running": "Ejecutando",
+  "stopped": "Detenido",
+  "error": "Error"
 }

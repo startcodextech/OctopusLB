@@ -68,7 +68,7 @@ const Sidebar: FC<Props> = (props) => {
                 className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar-background duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex items-center justify-between gap-2 px-6 py-5 lg:py-6">
-                    <Link href="/" className="flex items-center font-black text-[24px]">
+                    <Link href="/" className="flex items-center font-black text-[24px] text-text-primary">
                         <Image src="/images/logo.png" className="mr-3" alt="Octopus LB" width={36} height={36}/>
                         Octopus LB
                     </Link>
@@ -95,39 +95,35 @@ const Sidebar: FC<Props> = (props) => {
                 </div>
 
                 <div className="no-scrollbar flex flex-col overflow-y-auto duration-200 ease-linear">
-                    <div className="mt-5 py-4 lg:mt-9">
-                        <div>
-                            <ul className="mb-6 flex flex-col gap-1.5">
-                                {
-                                    [
-                                        {text: t('dashboard'), icon: 'icon-dashboard', href: '/'},
-                                        {text: t('balancer'), icon: 'icon-balancer', href: '/balancer'},
-                                        {text: t('dhcp'), icon: 'icon-dhcp', href: '/dhcp'},
-                                        {text: t('firewall'), icon: 'icon-firewall', href: '/firewall'},
-                                        {text: t('dns'), icon: 'icon-dns', href: '/dns'},
-                                        {text: t('bgp'), icon: 'icon-bgp', href: '/bgp'},
-                                    ].map((item, index) => {
+                    <ul className="mb-6 flex flex-col gap-1.5">
+                        {
+                            [
+                                {text: t('dashboard'), icon: 'icon-dashboard', href: '/'},
+                                {text: t('balancer'), icon: 'icon-balancer', href: '/balancer'},
+                                {text: t('dhcp'), icon: 'icon-dhcp', href: '/dhcp'},
+                                {text: t('firewall'), icon: 'icon-firewall', href: '/firewall'},
+                                {text: t('dns'), icon: 'icon-dns', href: '/dns'},
+                                {text: t('bgp'), icon: 'icon-bgp', href: '/bgp'},
+                            ].map((item, index) => {
 
-                                        const isActive = item.href === '/' ? pathname === item.href : pathname.includes(item.href);
+                                const isActive = item.href === '/' ? pathname === item.href : pathname.includes(item.href);
 
-                                        return (
-                                            <li key={index}
-                                                className={`group relative font-medium px-4 lg:px-6 ${isActive ? 'bg-primary-50' : ''} ${isActive ? 'text-black !font-bold' : 'text-sidebar-text'} hover:text-black cursor-pointer ease-in-out`}>
-                                                {isActive && <Active/>}
-                                                <Link
-                                                    href={`/${lng}${item.href}`}
-                                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4`}
-                                                >
-                                                    <i className={`${item.icon} group-hover:text-black text-2xl ${isActive ? 'text-black' : 'text-sidebar-icon'}`}/>
-                                                    {item.text}
-                                                </Link>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                                return (
+                                    <li key={index}
+                                        className={`group relative font-medium px-4 lg:px-6 ${isActive ? 'text-text-primary !font-bold' : 'text-text-secondary'} hover:text-text-primary cursor-pointer ease-in-out`}>
+                                        {isActive && <Active/>}
+                                        <Link
+                                            href={`/${lng}${item.href}`}
+                                            className={`${isActive ? 'bg-primary-100 rounded-xl' : ''} group relative flex items-center gap-2.5 rounded-sm py-2 px-4`}
+                                        >
+                                            <i className={`${item.icon} text-2xl`}/>
+                                            {item.text}
+                                        </Link>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
                 </div>
             </aside>
         </>
