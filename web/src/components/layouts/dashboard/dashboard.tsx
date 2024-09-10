@@ -21,17 +21,16 @@ const Dashboard:FC<Props> = (props) => {
             <Context.Provider value={{lng}}>
                 <div className="flex h-screen overflow-hidden">
                     <Sidebar open={sidebarOpen} toggle={setSidebarOpen}/>
-                    <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                    <div className="relative flex flex-1 flex-col overflow-x-hidden min-h-lvh bg-neutral-background overflow-y-hidden">
                         <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
-                        <main>
-                            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                        <main className="overflow-y-hidden h-screen lg:p-4">
+                            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-white min-h-full max-h-full lg:rounded-2xl overflow-scroll">
                                 {children}
                             </div>
                         </main>
                     </div>
                 </div>
             </Context.Provider>
-
         </>
     )
 };
