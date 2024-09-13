@@ -27,7 +27,7 @@ export async function generateMetadata({ params: { lng } }: {
 const RootLayout = ({children, params: {lng}}: Readonly<{ children: React.ReactNode; params: {lng: string}}>) => {
     return (
         <html lang={lng} dir={dir(lng)}>
-        <body>
+        <body className="bg-base dark:bg-base-dark">
         <DashboardTemplate lng={lng}>
             {children}
         </DashboardTemplate>

@@ -65,13 +65,15 @@ const Sidebar: FC<Props> = (props) => {
         <>
             <aside
                 ref={sidebar}
-                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar-background duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden bg-sidebar dark:bg-sidebar-dark duration-300 ease-linear lg:static lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex items-center justify-between gap-2 px-6 py-5 lg:py-6">
                     <Link href="/" className="flex items-center font-black text-[24px] text-text-primary">
                         <Image src="/images/logo.png" className="mr-3" alt="Octopus LB" width={36} height={36}/>
                         Octopus LB
                     </Link>
+
+                    <span className="bg-success-dark-1">hajhsk kbakjshdb</span>
 
                     <button
                         ref={trigger}
