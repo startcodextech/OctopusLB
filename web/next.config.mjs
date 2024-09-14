@@ -3,17 +3,17 @@ import { dirname, join } from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "export",
-    distDir: "build",
-    reactStrictMode: true,
-    swcMinify: true,
-    cleanDistDir: true,
-    images: {
-        unoptimized: true,
-    },
-    sassOptions: {
-        includePaths: [join(dirname(fileURLToPath(import.meta.url)), "styles")]
-    },
+  output: 'export',
+  distDir: 'build',
+  reactStrictMode: true,
+  swcMinify: true,
+  cleanDistDir: true,
+  images: {
+    unoptimized: true,
+  },
+  sassOptions: {
+    includePaths: [join(dirname(fileURLToPath(import.meta.url)), 'styles')],
+  },
 };
 
 export default nextConfig;

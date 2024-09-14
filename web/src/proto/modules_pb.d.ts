@@ -1,8 +1,7 @@
-import * as jspb from 'google-protobuf'
+import * as jspb from 'google-protobuf';
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb'; // proto import: "google/protobuf/empty.proto"
 import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb'; // proto import: "google/protobuf/timestamp.proto"
-
 
 export class Module extends jspb.Message {
   getId(): number;
@@ -42,24 +41,30 @@ export class Module extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Module.AsObject;
   static toObject(includeInstance: boolean, msg: Module): Module.AsObject;
-  static serializeBinaryToWriter(message: Module, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Module,
+    writer: jspb.BinaryWriter
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Module;
-  static deserializeBinaryFromReader(message: Module, reader: jspb.BinaryReader): Module;
+  static deserializeBinaryFromReader(
+    message: Module,
+    reader: jspb.BinaryReader
+  ): Module;
 }
 
 export namespace Module {
   export type AsObject = {
-    id: number,
-    name: string,
-    defaultSystem: boolean,
-    installed: boolean,
-    started: boolean,
-    enabled: boolean,
-    tool: string,
-    toolVersion: string,
-    createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-    updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
-  }
+    id: number;
+    name: string;
+    defaultSystem: boolean;
+    installed: boolean;
+    started: boolean;
+    enabled: boolean;
+    tool: string;
+    toolVersion: string;
+    createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject;
+    updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject;
+  };
 }
 
 export class GetModulesResponse extends jspb.Message {
@@ -70,15 +75,23 @@ export class GetModulesResponse extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetModulesResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetModulesResponse): GetModulesResponse.AsObject;
-  static serializeBinaryToWriter(message: GetModulesResponse, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: GetModulesResponse
+  ): GetModulesResponse.AsObject;
+  static serializeBinaryToWriter(
+    message: GetModulesResponse,
+    writer: jspb.BinaryWriter
+  ): void;
   static deserializeBinary(bytes: Uint8Array): GetModulesResponse;
-  static deserializeBinaryFromReader(message: GetModulesResponse, reader: jspb.BinaryReader): GetModulesResponse;
+  static deserializeBinaryFromReader(
+    message: GetModulesResponse,
+    reader: jspb.BinaryReader
+  ): GetModulesResponse;
 }
 
 export namespace GetModulesResponse {
   export type AsObject = {
-    resultList: Array<Module.AsObject>,
-  }
+    resultList: Array<Module.AsObject>;
+  };
 }
-

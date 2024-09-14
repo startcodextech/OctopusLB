@@ -1,26 +1,24 @@
 'use client';
 
-import React, {FC, PropsWithChildren} from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
-type Props = PropsWithChildren<{
-
-}>;
+type Props = PropsWithChildren<{}>;
 
 const HeaderInfo: FC<Props> = (props) => {
-    const {children} = props;
+  const { children } = props;
 
-    return (
-        <>
-            <div className="flex flex-row py-8 px-0 gap-4 items-center">
-                <div className="w-full flex flex-wrap justify-between items-center content-center gap-y-4">
-                    {children}
-                </div>
-                <button className="flex items-center justify-between max-w-11 max-h-11 text-3xl p-2.5 rounded-[0.5rem] hover:bg-neutral-background">
-                    <i className="icon-setting" />
-                </button>
-            </div>
-        </>
-    )
+  return (
+    <>
+      <div className='flex flex-row items-center gap-4 px-0 py-8'>
+        <div className='flex w-full flex-wrap content-center items-center justify-between gap-y-4'>
+          {children}
+        </div>
+        <button className='hover:bg-neutral-background flex max-h-11 max-w-11 items-center justify-between rounded-[0.5rem] p-2.5 text-3xl'>
+          <i className='icon-setting' />
+        </button>
+      </div>
+    </>
+  );
 };
 
 export default HeaderInfo;

@@ -10,26 +10,25 @@
 // 	protoc              v5.27.1
 // source: modules.proto
 
-
 /* eslint-disable */
 // @ts-nocheck
-
 
 import * as grpcWeb from 'grpc-web';
 
 import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb'; // proto import: "google/protobuf/empty.proto"
 import * as modules_pb from './modules_pb'; // proto import: "modules.proto"
 
-
 export class ModuleServiceClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
-  credentials_: null | { [index: string]: string; };
-  options_: null | { [index: string]: any; };
+  credentials_: null | { [index: string]: string };
+  options_: null | { [index: string]: any };
 
-  constructor (hostname: string,
-               credentials?: null | { [index: string]: string; },
-               options?: null | { [index: string]: any; }) {
+  constructor(
+    hostname: string,
+    credentials?: null | { [index: string]: string },
+    options?: null | { [index: string]: any }
+  ) {
     if (!options) options = {};
     if (!credentials) credentials = {};
     options['format'] = 'binary';
@@ -53,35 +52,40 @@ export class ModuleServiceClient {
 
   getModules(
     request: google_protobuf_empty_pb.Empty,
-    metadata?: grpcWeb.Metadata | null): Promise<modules_pb.GetModulesResponse>;
+    metadata?: grpcWeb.Metadata | null
+  ): Promise<modules_pb.GetModulesResponse>;
 
   getModules(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: modules_pb.GetModulesResponse) => void): grpcWeb.ClientReadableStream<modules_pb.GetModulesResponse>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: modules_pb.GetModulesResponse
+    ) => void
+  ): grpcWeb.ClientReadableStream<modules_pb.GetModulesResponse>;
 
   getModules(
     request: google_protobuf_empty_pb.Empty,
     metadata?: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: modules_pb.GetModulesResponse) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: modules_pb.GetModulesResponse
+    ) => void
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/module.ModuleService/GetModules',
+        this.hostname_ + '/module.ModuleService/GetModules',
         request,
         metadata || {},
         this.methodDescriptorGetModules,
-        callback);
+        callback
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/module.ModuleService/GetModules',
-    request,
-    metadata || {},
-    this.methodDescriptorGetModules);
+      this.hostname_ + '/module.ModuleService/GetModules',
+      request,
+      metadata || {},
+      this.methodDescriptorGetModules
+    );
   }
-
 }
-

@@ -1,7 +1,3 @@
-export default function DHCPConfiguration(){
-    return (
-        <>
-            DHCP Configuration
-        </>
-    );
+export default function DHCPConfiguration() {
+  return <>DHCP Configuration</>;
 }
