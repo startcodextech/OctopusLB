@@ -62,7 +62,7 @@ const Input: FC<Props> = (props) => {
       {type === 'password' ? (
         <>
           <div
-            className={`inline-block cursor-text relative${fullWidth ? 'w-full' : ''} ${focused ? 'bg-gray-200' : 'bg-gray-100'} rounded-xl`}
+            className={`inline-block cursor-text relative${fullWidth ? 'w-full' : ''} ${focused ? 'bg-gray-200' : 'bg-gray-100'} rounded-xl`.trim()}
             onClick={handleClick}
             onBlur={handleBlur}
             onFocus={handleFocus}
@@ -197,7 +197,7 @@ const Input: FC<Props> = (props) => {
               <input
                 {...rest}
                 onBlur={handleBlur}
-                className={`border-none bg-gray-100 px-5 py-2.5 text-base font-medium text-black outline-none placeholder:text-gray-500 focus:bg-gray-200 focus:ring-0 rounded-xl${fullWidth ? 'w-full' : ''} ${className}`}
+                className={`border-none bg-gray-100 px-5 py-2.5 text-base font-medium text-black outline-none placeholder:text-gray-500 focus:bg-gray-200 focus:ring-0 rounded-xl${fullWidth ? 'w-full' : ''}${className}`.trim()}
               />
             </>
           )}

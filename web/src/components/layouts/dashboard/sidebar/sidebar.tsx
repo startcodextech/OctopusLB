@@ -6,10 +6,7 @@ import Image from 'next/image';
 import { Context } from '@components/layouts/dashboard/dashboard';
 import { useTranslation } from '@app/i18n/client';
 
-type Props = {
-  open: boolean;
-  toggle: (open: boolean) => void;
-};
+type Props = {};
 
 const Active: FC = () => (
   <>
@@ -18,15 +15,12 @@ const Active: FC = () => (
 );
 
 const Sidebar: FC<Props> = (props) => {
-  const { open, toggle } = props;
-
   const pathname = usePathname();
 
-  const context = useContext(Context);
-  const { lng } = context;
+  const { lng, sidebarOpen, setSidebarOpen } = useContext(Context);
 
   const trigger = useRef<HTMLButtonElement>(null);
-  const sidebar = useRef<HTMLElement>(null);
+  const sidebar = useRef<HTMLDivElement>(null);
 
   const { t } = useTranslation(lng, 'menu');
 
@@ -37,26 +31,26 @@ const Sidebar: FC<Props> = (props) => {
       if (!sidebar.current || !trigger.current) return;
       if (!(target instanceof Node)) return;
       if (
-        !open ||
+        !sidebarOpen ||
         sidebar.current.contains(target) ||
         trigger.current.contains(target)
       )
         return;
-      toggle(false);
+      setSidebarOpen(false);
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  }, [open, toggle]);
+  }, [setSidebarOpen, sidebarOpen]);
 
   useEffect(() => {
     const keyHandler = ({ key }: KeyboardEvent) => {
-      if (!open || key !== 'Escape') return;
-      toggle(false);
+      if (!sidebarOpen || key !== 'Escape') return;
+      setSidebarOpen(false);
     };
 
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  }, [open, toggle]);
+  }, [sidebarOpen, setSidebarOpen]);
 
   useEffect(() => {
     if (expanded) {
@@ -69,14 +63,22 @@ const Sidebar: FC<Props> = (props) => {
   return (
     <>
       <div
-        className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 lg:p-2 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+        ref={sidebar}
+        className={`absolute left-0 top-0 z-50 flex h-screen w-72 flex-col overflow-y-hidden duration-300 ease-linear xl:static xl:translate-x-0 xl:p-2 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
-        <aside className='h-screen w-full bg-frame lg:rounded-3xl dark:bg-frame-dark'>
+        <aside className='h-screen w-full bg-frame xl:rounded-3xl dark:bg-frame-dark'>
           <div className='flex justify-center py-6 text-xl font-bold text-black dark:text-white'>
-            <Link href='/' className='flex flex-row items-center gap-3'>
+            <Link href={`/${lng}`} className='flex flex-row items-center gap-3'>
               <Image src='/images/logo.png' alt='logo' width={36} height={36} />
               Octopus LB
             </Link>
+            <button
+              ref={trigger}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-controls='sidebar'
+              aria-expanded={sidebarOpen}
+              className='hidden'
+            ></button>
           </div>
 
           <div className='flex flex-col items-center py-11 text-primary-text dark:text-primary-text-dark'>
@@ -87,7 +89,7 @@ const Sidebar: FC<Props> = (props) => {
               width={100}
               height={100}
             />
-            <button className='mt-2 w-full flex flex-col items-center gap-0'>
+            <button className='mt-2 flex w-full flex-col items-center gap-0'>
               <div className='flex flex-row items-center gap-2 text-lg font-medium'>
                 Julio Caicedo
                 <svg

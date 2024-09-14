@@ -1,36 +1,40 @@
 'use client';
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren, useContext } from 'react';
 import Image from 'next/image';
 import Search from './search';
 import ToggleSidebar from './toggle-sidebar';
 import DropdownUser from './user';
 import DropdownNotifications from './notifications';
+import { Context } from '@components/layouts/dashboard/dashboard';
 
-type Props = {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-};
+type Props = PropsWithChildren<{}>;
 
 const Navbar: FC<Props> = (props) => {
-  const { sidebarOpen, setSidebarOpen } = props;
+  const { children } = props;
+  const { sidebarOpen, setSidebarOpen, ...rest } = useContext(Context);
+
+  console.log('rest', rest);
   return (
     <>
-      <header className='sticky top-0 z-40 flex w-full bg-white drop-shadow'>
-        <div className='shadow-2 flex flex-grow items-center justify-between px-4 py-2 md:px-6 2xl:px-11'>
-          <div className='flex items-center gap-2 sm:gap-4 lg:hidden'>
+      <header className='sticky top-0 z-40 flex w-full drop-shadow'>
+        <div className='shadow-2 flex flex-grow items-center justify-between px-4 py-5 md:px-6 2xl:px-11'>
+          <div className='flex items-center gap-2 sm:gap-4 xl:hidden'>
             <ToggleSidebar
               sidebarOpen={sidebarOpen}
               setSidebarOpen={setSidebarOpen}
             />
-            <a href='/' className='block flex-shrink-0 lg:hidden'>
-              <Image
-                src='/images/logo.png'
-                alt={''}
-                className='w-8'
-                width={24}
-                height={24}
-              />
-            </a>
+            {!children && (
+              <a href='/' className='block flex-shrink-0 xl:hidden'>
+                <Image
+                  src='/images/logo.png'
+                  alt={''}
+                  className='w-8'
+                  width={24}
+                  height={24}
+                />
+              </a>
+            )}
+            {children}
           </div>
           <Search />
           <div className='flex items-center gap-3 2xsm:gap-7'>

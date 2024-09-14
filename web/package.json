@@ -6,10 +6,8 @@
     "dev": "next dev",
     "build": "next build && node folder-public.js",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "lint": "next lint --fix",
+    "format": "prettier --write --ignore-path .gitignore .",
     "clean": "rm -rf .next && rm -rf build"
   },
   "dependencies": {
