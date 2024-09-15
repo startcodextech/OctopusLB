@@ -1,11 +1,5 @@
 # Octopus LB
-```shell
-brew install buf
-brew install protobuf
-brew install protoc-gen-js
-brew install protoc-gen-grpc-web
-go get github.com/grpc-ecosystem/grpc-gateway/v2@v2.20.0
-```
+
 
 ## Caddy
 ```shell
@@ -39,12 +33,3 @@ brew install FiloSottile/musl-cross/musl-cross
 ```shell
 sudo make build
 ```
-
-sudo systemctl status firewalld
-sudo systemctl start firewalld
-sudo systemctl enable firewalld
-sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
-sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-ports
-nmap -p 80,443 <tu-dominio-o-ip>

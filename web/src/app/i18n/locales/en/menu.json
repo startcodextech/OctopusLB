@@ -1,8 +1,0 @@
-{
-  "dashboard": "Dashboard",
-  "balancer": "Load Balancer",
-  "dhcp": "DHCP",
-  "firewall": "Firewall",
-  "dns": "DNS",
-  "bgp": "BGP"
-}

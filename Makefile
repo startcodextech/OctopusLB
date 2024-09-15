@@ -27,34 +27,8 @@ else
     CHOWN_GROUP := root
 endif
 
-.PHONY: buf
-buf:
-	@echo "Checking buf..."
-	@buf generate
-	@rm -f $(CURDIR)/web/proto
-	@mkdir -p $(CURDIR)/web/proto
-	@mkdir -p $(CURDIR)/web/src/proto
-	@cp $(CURDIR)/proto/* $(CURDIR)/web/proto
-	@cd $(CURDIR)/web && protoc -I=$(CURDIR)/web/proto $(CURDIR)/web/proto/*.proto --js_out=import_style=commonjs,binary:$(CURDIR)/web/src/proto --grpc-web_out=import_style=typescript,mode=grpcweb:$(CURDIR)/web/src/proto
-	@rm -rf $(CURDIR)/web/proto
-	@echo "Done!"
-
-.PHONY: app
-app: buf
-	@echo "Building web react"
-	@rm -rf $(CURDIR)/web/.next $(CURDIR)/web/build
-	@sed -i.bak 's/"version": "[^"]*"/"version": "$(VERSION)"/' $(CURDIR)/web/package.json
-	@rm -rf $(CURDIR)/internal/http/public/*
-	if [ ! -d "web/node_modules" ] || [ -z "$$(ls -A web/node_modules)" ]; then \
-  		cd web && npm install && npm run build; \
-	else \
-		cd web && npm run build; \
-	fi
-	@cp -r $(CURDIR)/web/build/* $(CURDIR)/internal/http/public/
-	@echo "Done!"
-
 .PHONY: build-linux-amd64 app
-build-linux-amd64: app
+build-linux-amd64:
 	@echo "Building version $(VERSION) linux/amd64 binary..."
 	$(BUILD_LINUX_AMD64) xcaddy build --with github.com/mholt/caddy-l4 --output $(BINARY_LINUX_PATH_AMD64)-caddy
 	$(BUILD_LINUX_AMD64) go build -o $(BINARY_LINUX_PATH_AMD64) $(MAIN_FILE)
