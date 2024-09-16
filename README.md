@@ -6,7 +6,10 @@
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 xcaddy build --with github.com/mholt/caddy-l4
 ```
-
+## Cobra
+```shell
+go install github.com/spf13/cobra-cli@latest
+```
 
 ## Cross-compile
 
